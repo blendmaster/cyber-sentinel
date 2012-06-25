@@ -115,4 +115,39 @@ public class MutableMessage implements Message {
 		this.hasSender = false;
 		this.sender = null;
 	}
+
+	@Override
+	public AttributeSet getAttributeSet() {
+		return new AttributeSet() {
+			private static final long serialVersionUID = 3862550727811323851L;
+
+			@Override
+			public boolean hasTime() {
+				return hasTime;
+			}
+			
+			@Override
+			public boolean hasSender() {
+				return hasSender;
+			}
+			
+			@Override
+			public boolean hasLocation() {
+				return hasLocation;
+			}
+			
+			@Override
+			public boolean hasContents() {
+				return hasContents;
+			}
+		};
+	}
+
+	@Override
+	public boolean conformsTo(AttributeSet target) {
+		return (!target.hasContents() || this.hasContents)
+			&& (!target.hasLocation() || this.hasLocation)
+			&& (!target.hasSender()   || this.hasSender)
+			&& (!target.hasTime()     || this.hasTime);
+	}
 }

@@ -25,4 +25,16 @@ public interface Message extends Serializable {
 	
 	public boolean hasSender();
 	public String getSender();
+	
+	public AttributeSet getAttributeSet();
+	
+	/**
+	 * A message conforms to an AttributeSet iff for all attributes in the target, the
+	 * attribute set of the message also contains those attributes. It is okay for the
+	 * message to have extra attributes not within the target. A message always
+	 * conforms to its own attribute set.
+	 *  
+	 * @param target The target attribute set
+	 */
+	public boolean conformsTo(AttributeSet target);
 }
