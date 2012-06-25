@@ -101,7 +101,7 @@ public class Connection {
 		writer.flush();
 		System.out.println("> " + command);
 	}
-	
+		
 	public void join(String channel) {
 		command("JOIN " + channel);
 	}

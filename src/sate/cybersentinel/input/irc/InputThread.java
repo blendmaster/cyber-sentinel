@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Date;
@@ -16,6 +17,8 @@ import sate.cybersentinel.message.MutableMessage;
 public class InputThread extends Thread {
 	/** Reads from IRC */
 	private BufferedReader reader;
+	/** Writes to IRC */
+	private PrintWriter writer;
 	
 	/** Writes to Analysis */
 	private ObjectOutputStream output;
@@ -23,6 +26,7 @@ public class InputThread extends Thread {
 	public InputThread(Socket socket, Socket analysisSocket) {
 		try {
 			this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			this.writer = new PrintWriter(socket.getOutputStream());
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -42,12 +46,20 @@ public class InputThread extends Thread {
 				System.out.println(l);
 				
 				int i = l.indexOf("PRIVMSG");
-				if(i != -1) {
+				if(i >= 0) {
 					String s = l.substring(i + 8);
 					int i2 = s.indexOf(":");
+					if(i2 < 0) {
+						continue;
+					}
 					
 					String text = s.substring(i2 + 1);
-					String sender = l.substring(1, l.indexOf("!"));
+					int i3 = l.indexOf("!");
+					if(i3 < 0) {
+						continue;
+					}
+					
+					String sender = l.substring(1, i3);
 					Date time = new Date();
 					
 					MutableMessage m = new MutableMessage();
@@ -65,6 +77,14 @@ public class InputThread extends Thread {
 					}
 					
 					System.out.println("-- " + sender + " -- " + text);
+				}
+				
+				i = l.indexOf("PING");
+				if(i >= 0) {
+					String daemon = l.substring(i + 5);
+					System.out.println("><><> " + daemon);
+					writer.write("PONG :localhost " + daemon + "\r\n");
+					System.out.println("Ping Pong!");
 				}
 			}
 		} catch(IOException e) {
