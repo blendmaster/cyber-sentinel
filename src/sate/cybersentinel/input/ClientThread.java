@@ -46,9 +46,16 @@ public class ClientThread extends Thread {
 					}
 				}
 			}
-			
+
 		} catch (ClassNotFoundException | IOException e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				this.client.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
+		
 	}
 }
