@@ -10,6 +10,8 @@ import sate.cybersentinel.message.AttributeSet;
  * to. Notably, it also includes the global attribute set that all messages sent must
  * conform to (which will be checked before analysis even starts). This class is immutable.
  * 
+ * TODO Figure out exactly what fields need to be in here.
+ * 
  * @author Jared Hance
  */
 public class Session implements Serializable {
