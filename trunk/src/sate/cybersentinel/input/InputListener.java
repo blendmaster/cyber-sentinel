@@ -5,7 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class InputListener {
-	private static final int DEFAULT_PORT = 275;
+	public static final int DEFAULT_PORT = 275;
 	
 	private ServerSocket server;
 	
