@@ -3,10 +3,15 @@ package sate.cybersentinel.input.irc;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.math.BigInteger;
 import java.net.Socket;
 import java.security.SecureRandom;
+
+import sate.cybersentinel.input.InputListener;
+import sate.cybersentinel.input.Session;
+import sate.cybersentinel.message.AttributeSet;
 
 public class Connection {
 	public static final int DEFAULT_PORT = 6667;
@@ -20,7 +25,6 @@ public class Connection {
 	
 	private Socket socket;
 	private PrintWriter writer;
-	private BufferedReader reader;
 	private Thread thread;
 	
 	public Connection(String nickname, String hostname) {
@@ -51,13 +55,40 @@ public class Connection {
 		try {
 			socket = new Socket(hostname, port);
 			writer = new PrintWriter(socket.getOutputStream());
-			reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			
 			command("PASS " + password);
 			command("NICK " + nickname);
 			command("USER " + nickname + " 0 * :cybersentinel bot");
 			
-			thread = new InputThread(socket);
+			//Socket analysisSocket = new Socket("localhost", InputListener.DEFAULT_PORT);
+			AttributeSet attributes = new AttributeSet() {
+				private static final long serialVersionUID = 5163806881113186316L;
+
+				@Override
+				public boolean hasTime() {
+					return true;
+				}
+				
+				@Override
+				public boolean hasSender() {
+					return true;
+				}
+				
+				@Override
+				public boolean hasLocation() {
+					return false;
+				}
+				
+				@Override
+				public boolean hasContents() {
+					return true;
+				}
+			};
+			
+			Session session = new Session("irc", attributes, "", 0);
+			//new ObjectOutputStream(analysisSocket.getOutputStream()).writeObject(session);
+			
+			thread = new InputThread(socket, /*analysisSocket*/ null);
 			thread.start();
 			
 		} catch (IOException e) {
