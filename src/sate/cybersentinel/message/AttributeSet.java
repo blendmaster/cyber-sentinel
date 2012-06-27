@@ -8,6 +8,7 @@ import java.io.Serializable;
  * @author Jared Hance
  */
 public interface AttributeSet extends Serializable {
+	public boolean hasChannel();
 	public boolean hasContents();
 	public boolean hasTime();
 	public boolean hasLocation();

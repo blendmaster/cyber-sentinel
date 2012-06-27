@@ -83,8 +83,7 @@ public class InputThread extends Thread {
 				if(i >= 0) {
 					String daemon = l.substring(i + 5);
 					System.out.println("><><> " + daemon);
-					writer.write("PONG :localhost " + daemon + "\r\n");
-					System.out.println("Ping Pong!");
+					writer.write("PONG " + daemon + "\r\n");
 				}
 			}
 		} catch(IOException e) {

@@ -11,20 +11,18 @@ import java.util.Date;
  * Once the message is created, the Message interface should always be used rather than
  * MutableMessage to prevent the attributes from changing in the middle of analysis.
  * 
+ * A Message without a receiver is assumed to be in global chat (within the region if
+ * the location is available, otherwise to everyone)
+ * 
  * @author Jared Hance
  */
 public interface Message extends Serializable {
-	public boolean hasContents();
+	public int getChannel();
 	public String getContents();
-	
-	public boolean hasTime();
-	public Date getTime();
-	
-	public boolean hasLocation();
 	public Location getLocation();
-	
-	public boolean hasSender();
+	public String getReceiver();
 	public String getSender();
+	public Date getTime();
 	
 	public AttributeSet getAttributeSet();
 	

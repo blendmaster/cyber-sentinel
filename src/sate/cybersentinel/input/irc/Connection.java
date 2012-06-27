@@ -63,14 +63,14 @@ public class Connection {
 			//Socket analysisSocket = new Socket("localhost", InputListener.DEFAULT_PORT);
 			AttributeSet attributes = new AttributeSet() {
 				private static final long serialVersionUID = 5163806881113186316L;
-
+				
 				@Override
-				public boolean hasTime() {
-					return true;
+				public boolean hasChannel() {
+					return false;
 				}
 				
 				@Override
-				public boolean hasSender() {
+				public boolean hasContents() {
 					return true;
 				}
 				
@@ -80,7 +80,12 @@ public class Connection {
 				}
 				
 				@Override
-				public boolean hasContents() {
+				public boolean hasSender() {
+					return true;
+				}
+				
+				@Override
+				public boolean hasTime() {
 					return true;
 				}
 			};
