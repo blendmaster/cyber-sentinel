@@ -3,6 +3,7 @@ package sate.cybersentinel.message;
 public class DefaultAttributeSet implements AttributeSet {
 	private static final long serialVersionUID = -8952680165355414486L;
 	
+	private boolean hasChannel;
 	private boolean hasContents;
 	private boolean hasTime;
 	private boolean hasLocation;
@@ -17,6 +18,11 @@ public class DefaultAttributeSet implements AttributeSet {
 		this.hasTime = hasTime;
 		this.hasLocation = hasLocation;
 		this.hasSender = hasSender;
+	}
+	
+	@Override
+	public boolean hasChannel() {
+		return hasChannel;
 	}
 	
 	@Override
