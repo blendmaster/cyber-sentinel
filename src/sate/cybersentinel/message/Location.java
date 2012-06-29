@@ -28,6 +28,7 @@ public class Location {
 	 * @param z The Z-coordinate
 	 */
 	public Location(String region, double x, double y, double z) {
+		this.region = region;
 		this.x = x;
 		this.y = y;
 		this.z = z;
