@@ -20,8 +20,10 @@ public interface Message extends Serializable {
 	public int getChannel();
 	public String getContents();
 	public Location getLocation();
-	public String getReceiver();
-	public String getSender();
+	public String getReceiverName();
+	public String getReceiverUUID();
+	public String getSenderName();
+	public String getSenderUUID();
 	public Date getTime();
 	
 	public AttributeSet getAttributeSet();

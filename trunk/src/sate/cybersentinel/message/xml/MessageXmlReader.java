@@ -24,9 +24,8 @@ import sate.cybersentinel.message.MutableMessage;
  */
 public class MessageXmlReader {
 	private DocumentBuilder builder;
-	
-	public MessageXmlReader()
-	{
+
+	public MessageXmlReader() {
 		DocumentBuilderFactory f = DocumentBuilderFactory.newInstance();
 		try {
 			this.builder = f.newDocumentBuilder();
@@ -34,34 +33,40 @@ public class MessageXmlReader {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public Message readMessage(String xml) {
 		MutableMessage message = new MutableMessage();
-		
+
 		try {
 			Document doc = builder.parse(xml);
 			Element root = doc.getDocumentElement();
-			
+
 			NodeList children = root.getChildNodes();
-			for(int i = 0; i < children.getLength(); i++) {
+			for (int i = 0; i < children.getLength(); i++) {
 				Node child = children.item(i);
-				if(child.getNodeType() == Node.ELEMENT_NODE) {
+				if (child.getNodeType() == Node.ELEMENT_NODE) {
 					String name = child.getNodeName();
-					switch(name) {
+					switch (name) {
 					case "channel":
-						message.setChannel(Integer.parseInt(getElementText(child)));
+						message.setChannel(Integer
+								.parseInt(getElementText(child)));
 						break;
 					case "contents":
 						message.setContents(getElementText(child));
 						break;
 					case "receiver":
-						message.setReceiver(getElementText(child));
+						XmlPerson receiver = parsePerson(child);
+						message.setReceiverName(receiver.name);
+						message.setReceiverUUID(receiver.uuid);
 						break;
 					case "sender":
-						message.setSender(getElementText(child));
+						XmlPerson sender = parsePerson(child);
+						message.setSenderName(sender.name);
+						message.setSenderUUID(sender.uuid);
 						break;
 					case "time":
-						message.setTime(new Date(Long.parseLong(getElementText(child))));
+						message.setTime(new Date(Long
+								.parseLong(getElementText(child))));
 						break;
 					case "location":
 						message.setLocation(parseLocation(child));
@@ -72,32 +77,33 @@ public class MessageXmlReader {
 		} catch (SAXException | IOException e) {
 			e.printStackTrace();
 		}
-		
+
 		return message;
 	}
-	
+
 	private String getElementText(Node node) {
 		NodeList children = node.getChildNodes();
-		for(int i = 0; i < children.getLength(); i++) {
+		for (int i = 0; i < children.getLength(); i++) {
 			Node child = children.item(i);
-			if(child.getNodeType() == Node.TEXT_NODE) {
+			if (child.getNodeType() == Node.TEXT_NODE) {
 				return child.getTextContent();
 			}
 		}
-	
-		throw new MessageXmlParsingException("Element " + node.getNodeName() + " has no Text child node");
+
+		throw new MessageXmlParsingException("Element " + node.getNodeName()
+				+ " has no Text child node");
 	}
-	
+
 	private Location parseLocation(Node node) {
 		double x = 0, y = 0, z = 0;
 		String region = "";
 		boolean foundRegion = false, foundX = false, foundY = false, foundZ = false;
-		
+
 		NodeList children = node.getChildNodes();
-		for(int i = 0; i < children.getLength(); i++) {
+		for (int i = 0; i < children.getLength(); i++) {
 			Node child = children.item(i);
-			if(child.getNodeType() == Node.ELEMENT_NODE) {
-				switch(child.getNodeName()) {
+			if (child.getNodeType() == Node.ELEMENT_NODE) {
+				switch (child.getNodeName()) {
 				case "region":
 					foundRegion = true;
 					region = getElementText(child);
@@ -117,12 +123,40 @@ public class MessageXmlReader {
 				}
 			}
 		}
-		
-		if(foundRegion && foundX && foundY && foundZ) {
+
+		if (foundRegion && foundX && foundY && foundZ) {
 			return new Location(region, x, y, z);
+		} else {
+			throw new MessageXmlParsingException(
+					"Missing a coordinate of location");
 		}
-		else {
-			throw new MessageXmlParsingException("Missing a coordinate of location");
+	}
+
+	public XmlPerson parsePerson(Node element) {
+		boolean foundName = false, foundUUID = false;
+		XmlPerson person = new XmlPerson();
+
+		NodeList children = element.getChildNodes();
+		for (int i = 0; i < children.getLength(); i++) {
+			Node child = children.item(i);
+			if (child.getNodeType() == Node.ELEMENT_NODE) {
+				switch (child.getNodeName()) {
+				case "name":
+					foundName = true;
+					person.name = getElementText(child);
+					break;
+				case "uuid":
+					foundUUID = true;
+					person.uuid = getElementText(child);
+					break;
+				}
+			}
+		}
+
+		if (foundName && foundUUID) {
+			return person;
+		} else {
+			throw new MessageXmlParsingException("Missing a field of person");
 		}
 	}
 }

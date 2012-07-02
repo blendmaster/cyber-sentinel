@@ -7,17 +7,26 @@ public class DefaultAttributeSet implements AttributeSet {
 	private boolean hasContents;
 	private boolean hasTime;
 	private boolean hasLocation;
-	private boolean hasSender;
+	private boolean hasReceiverName;
+	private boolean hasReceiverUUID;
+	private boolean hasSenderName;
+	private boolean hasSenderUUID;
 	
 	public DefaultAttributeSet(
 			boolean hasContents, 
 			boolean hasTime, 
 			boolean hasLocation, 
-			boolean hasSender) {
+			boolean hasReceiverName,
+			boolean hasReceiverUUID,
+			boolean hasSenderName,
+			boolean hasSenderUUID) {
 		this.hasContents = hasContents;
 		this.hasTime = hasTime;
 		this.hasLocation = hasLocation;
-		this.hasSender = hasSender;
+		this.hasReceiverName = hasReceiverName;
+		this.hasReceiverUUID = hasReceiverUUID;
+		this.hasSenderName = hasSenderName;
+		this.hasSenderUUID = hasSenderUUID;
 	}
 	
 	@Override
@@ -39,9 +48,24 @@ public class DefaultAttributeSet implements AttributeSet {
 	public boolean hasLocation() {
 		return hasLocation;
 	}
+	
+	@Override
+	public boolean hasReceiverName() {
+		return this.hasReceiverName;
+	}
+	
+	@Override
+	public boolean hasReceiverUUID() {
+		return this.hasReceiverUUID;
+	}
 
 	@Override
-	public boolean hasSender() {
-		return hasSender;
+	public boolean hasSenderName() {
+		return hasSenderName;
+	}
+	
+	@Override
+	public boolean hasSenderUUID() {
+		return this.hasSenderUUID;
 	}
 }

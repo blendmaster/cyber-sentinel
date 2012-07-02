@@ -80,8 +80,23 @@ public class Connection {
 				}
 				
 				@Override
-				public boolean hasSender() {
+				public boolean hasSenderName() {
+					return false;
+				}
+				
+				@Override
+				public boolean hasSenderUUID() {
 					return true;
+				}
+				
+				@Override
+				public boolean hasReceiverName() {
+					return false;
+				}
+				
+				@Override
+				public boolean hasReceiverUUID() {
+					return false;
 				}
 				
 				@Override

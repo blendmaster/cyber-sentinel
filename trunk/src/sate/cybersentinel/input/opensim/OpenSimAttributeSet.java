@@ -16,17 +16,32 @@ public class OpenSimAttributeSet implements AttributeSet {
 	}
 
 	@Override
-	public boolean hasTime() {
-		return true;
-	}
-
-	@Override
 	public boolean hasLocation() {
 		return true;
 	}
 
 	@Override
-	public boolean hasSender() {
+	public boolean hasSenderName() {
+		return true;
+	}
+	
+	@Override
+	public boolean hasSenderUUID() {
+		return true;
+	}
+	
+	@Override
+	public boolean hasReceiverName() {
+		return false;
+	}
+	
+	@Override
+	public boolean hasReceiverUUID() {
+		return false;
+	}
+	
+	@Override
+	public boolean hasTime() {
 		return true;
 	}
 }
