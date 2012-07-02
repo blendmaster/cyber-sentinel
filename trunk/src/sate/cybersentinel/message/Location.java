@@ -1,5 +1,8 @@
 package sate.cybersentinel.message;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 /** 
  * Represents a 3 dimensional location, when using the virtual world. The location is
  * immutable. If no coordinates are specified, defaults to (0, 0, 0).
@@ -66,5 +69,17 @@ public class Location {
 		double dy = l1.y - l2.y;
 		double dz = l1.z - l2.z;
 		return Math.sqrt(dx * dx + dy * dy + dz * dz);
+	}
+	
+	@Override
+	public String toString() {
+		Map<String, Object> map = new TreeMap<String, Object>();
+
+		map.put("x", x);
+		map.put("y", y);
+		map.put("z", z);
+		map.put("region", region);
+
+		return map.toString();
 	}
 }

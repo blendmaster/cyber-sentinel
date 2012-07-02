@@ -256,7 +256,16 @@ public class MutableMessage implements Message {
 			map.put("location", location);
 		}
 		if(hasSenderName) {
-			map.put("sender", senderName);
+			map.put("senderName", senderName);
+		}
+		if(hasSenderUUID) {
+			map.put("senderUUID", senderUUID);
+		}
+		if(hasReceiverName) {
+			map.put("receiverName", receiverName);
+		}
+		if(hasReceiverUUID)  {
+			map.put("receiverUUID", receiverUUID);
 		}
 		if(hasTime) {
 			map.put("time", time);
