@@ -39,7 +39,7 @@ public class Connection {
 	public Connection(String hostname, int port) throws UnknownHostException {
 		this.address =
 				new InetSocketAddress(InetAddress.getByName(hostname), port);
-		this.decoder = Charset.forName("UTF-16").newDecoder();
+		this.decoder = Charset.forName("UTF-8").newDecoder();
 		this.xmlr = new MessageXmlReader();
 		
 		logger.config("Hostname = " + hostname);
@@ -56,11 +56,13 @@ public class Connection {
 			for(;;) {
 				ByteBuffer lengthBuffer = ByteBuffer.allocate(4);
 				channel.read(lengthBuffer);
+				lengthBuffer.flip();
 				int length = lengthBuffer.getInt();
 				logger.fine("About to receive message of length " + length);
 				
 				ByteBuffer buffer = ByteBuffer.allocate(length);
 				channel.read(buffer);
+				buffer.flip();
 				
 				String xml = decoder.decode(buffer).toString();
 				logger.fine("Received xml message: " + xml);
