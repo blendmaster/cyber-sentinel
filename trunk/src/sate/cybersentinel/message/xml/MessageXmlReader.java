@@ -1,6 +1,7 @@
 package sate.cybersentinel.message.xml;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.util.Date;
 
 import javax.xml.parsers.DocumentBuilder;
@@ -11,6 +12,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import sate.cybersentinel.message.Location;
@@ -38,7 +40,7 @@ public class MessageXmlReader {
 		MutableMessage message = new MutableMessage();
 
 		try {
-			Document doc = builder.parse(xml);
+			Document doc = builder.parse(new InputSource(new StringReader(xml)));
 			Element root = doc.getDocumentElement();
 
 			NodeList children = root.getChildNodes();
