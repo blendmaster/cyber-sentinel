@@ -23,11 +23,17 @@ public class MutableMessage implements Message {
 	protected boolean hasLocation = false;
 	protected Location location;
 	
-	protected boolean hasReceiver = false;
-	protected String receiver;
+	protected boolean hasReceiverName = false;
+	protected String receiverName;
 	
-	protected boolean hasSender;
-	protected String sender;
+	protected boolean hasReceiverUUID = false;
+	protected String receiverUUID;
+	
+	protected boolean hasSenderName;
+	protected String senderName;
+	
+	protected boolean hasSenderUUID = false;
+	protected String senderUUID;
 
 	protected boolean hasTime = false;
 	protected Date time;
@@ -87,33 +93,76 @@ public class MutableMessage implements Message {
 	}
 	
 	@Override
-	public String getReceiver() {
-		if(!this.hasReceiver) {
-			throw new MessageAttributeNotFoundException("receiver");
+	public String getReceiverName() {
+		if(!this.hasReceiverName) {
+			throw new MessageAttributeNotFoundException("receiverName");
 		}
-		return receiver;
+		return receiverName;
 	}
 	
-	public void setReceiver(String receiver) {
-		this.receiver = receiver;
+	public void setReceiverName(String receiver) {
+		this.hasReceiverName = true;
+		this.receiverName = receiver;
+	}
+	
+	public void clearReceiverName() {
+		this.hasReceiverName = false;
+		this.receiverName = null;
+	}
+	
+	@Override
+	public String getReceiverUUID() {
+		if(!this.hasReceiverUUID) {
+			throw new MessageAttributeNotFoundException("receiverUUID");
+		}
+		
+		return this.receiverUUID;
+	}
+	
+	public void setReceiverUUID(String receiverUUID) {
+		this.hasReceiverUUID = true;
+		this.receiverUUID = receiverUUID;
+	}
+	
+	public void clearReceiverUUID() {
+		this.hasReceiverUUID = false;
+		this.receiverUUID = null;
 	}
 
 	@Override
-	public String getSender() {
-		if(!hasSender) {
-			throw new MessageAttributeNotFoundException("sender");
+	public String getSenderName() {
+		if(!this.hasSenderName) {
+			throw new MessageAttributeNotFoundException("senderName");
 		}
-		return sender;
+		return this.senderName;
 	}
 	
-	public void setSender(String sender) {
-		this.hasSender = true;
-		this.sender = sender;
+	public void setSenderName(String senderName) {
+		this.hasSenderName = true;
+		this.senderName = senderName;
 	}
 	
-	public void clearSender() {
-		this.hasSender = false;
-		this.sender = null;
+	public void clearSenderName() {
+		this.hasSenderName = false;
+		this.senderName = null;
+	}
+	
+	@Override
+	public String getSenderUUID() {
+		if(!this.hasSenderUUID){
+			throw new MessageAttributeNotFoundException("senderUUID");
+		}
+		return this.senderUUID;
+	}
+	
+	public void setSenderUUID(String senderUUID) {
+		this.hasSenderUUID = true;
+		this.senderUUID = senderUUID;
+	}
+	
+	public void clearSenderUUID() {
+		this.hasSenderUUID = false;
+		this.senderUUID = null;
 	}
 	
 	@Override
@@ -155,8 +204,23 @@ public class MutableMessage implements Message {
 			}
 			
 			@Override
-			public boolean hasSender() {
-				return hasSender;
+			public boolean hasSenderName() {
+				return hasSenderName;
+			}
+			
+			@Override
+			public boolean hasSenderUUID() {
+				return hasSenderUUID;
+			}
+			
+			@Override
+			public boolean hasReceiverName() {
+				return hasReceiverName;
+			}
+			
+			@Override
+			public boolean hasReceiverUUID() {
+				return hasReceiverUUID;
 			}
 			
 			@Override
@@ -168,11 +232,14 @@ public class MutableMessage implements Message {
 
 	@Override
 	public boolean conformsTo(AttributeSet target) {
-		return (!target.hasChannel()  || this.hasChannel)
-			&& (!target.hasContents() || this.hasContents)
-			&& (!target.hasLocation() || this.hasLocation)
-			&& (!target.hasSender()   || this.hasSender)
-			&& (!target.hasTime()     || this.hasTime);
+		return (!target.hasChannel()      || this.hasChannel)
+			&& (!target.hasContents()     || this.hasContents)
+			&& (!target.hasLocation()     || this.hasLocation)
+			&& (!target.hasSenderName()   || this.hasSenderName)
+			&& (!target.hasSenderUUID()   || this.hasSenderUUID)
+			&& (!target.hasReceiverName() || this.hasReceiverName)
+			&& (!target.hasReceiverUUID() || this.hasReceiverUUID)
+			&& (!target.hasTime()         || this.hasTime);
 	}
 	
 	@Override
@@ -188,8 +255,8 @@ public class MutableMessage implements Message {
 		if(hasLocation) {
 			map.put("location", location);
 		}
-		if(hasSender) {
-			map.put("sender", sender);
+		if(hasSenderName) {
+			map.put("sender", senderName);
 		}
 		if(hasTime) {
 			map.put("time", time);

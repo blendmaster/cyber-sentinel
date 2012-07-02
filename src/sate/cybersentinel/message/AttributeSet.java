@@ -12,5 +12,8 @@ public interface AttributeSet extends Serializable {
 	public boolean hasContents();
 	public boolean hasTime();
 	public boolean hasLocation();
-	public boolean hasSender();
+	public boolean hasSenderName();
+	public boolean hasSenderUUID();
+	public boolean hasReceiverName();
+	public boolean hasReceiverUUID();
 }

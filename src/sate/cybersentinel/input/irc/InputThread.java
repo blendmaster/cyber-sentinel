@@ -64,7 +64,7 @@ public class InputThread extends Thread {
 					
 					MutableMessage m = new MutableMessage();
 					m.setContents(text);
-					m.setSender(sender);
+					m.setSenderUUID(sender);
 					m.setTime(time);
 					messages.add(m);
 					

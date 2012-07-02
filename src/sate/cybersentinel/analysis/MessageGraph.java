@@ -15,13 +15,13 @@ public class MessageGraph {
 		this.messages = messages;
 	}
 	
-	public void resolveConversationCycles(String name) {
+	public void resolveConversationCycles(String uuid) {
 		Map<String, List<Integer>> responsesMap = new HashMap<>();
 		int count = 0;
 		int i = 0;
 		while(i < messages.size()) {
 			Message message = messages.get(i);
-			if(message.getSender().equals(name)) {
+			if(message.getSenderUUID().equals(uuid)) {
 				if(i + 1 >= messages.size()) {
 					break;
 				}
@@ -31,10 +31,10 @@ public class MessageGraph {
 				List<String> personsTemp = new ArrayList<>();
 				int responseCount = 0;
 				
-				while(i < messages.size() && !messages.get(i).equals(name)) {
+				while(i < messages.size() && !messages.get(i).equals(uuid)) {
 					message = messages.get(i);
 					
-					String other = message.getSender();
+					String other = message.getSenderUUID();
 					personsTemp.add(other);
 					
 					List<Integer> responses;
