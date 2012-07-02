@@ -9,7 +9,6 @@ import java.nio.ByteBuffer;
 import java.nio.channels.SocketChannel;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import sate.cybersentinel.message.Message;
@@ -19,11 +18,11 @@ public class Connection {
 	public static final String DEFAULT_HOSTNAME = "virtualdiscoverycenter.net";
 	public static final int DEFAULT_PORT = 8019;
 	
+	private static final Logger logger = Logger.getLogger(Connection.class.getName());
+	
 	private SocketAddress address;
 	private CharsetDecoder decoder;
 	private MessageXmlReader xmlr;
-	
-	private static final Logger logger = Logger.getLogger(Connection.class.getName());
 	
 	public Connection() throws UnknownHostException {
 		this(DEFAULT_HOSTNAME, DEFAULT_PORT);
@@ -42,7 +41,10 @@ public class Connection {
 				new InetSocketAddress(InetAddress.getByName(hostname), port);
 		this.decoder = Charset.forName("UTF-16").newDecoder();
 		this.xmlr = new MessageXmlReader();
-		logger.setLevel(Level.ALL);
+		
+		logger.config("Hostname = " + hostname);
+		logger.config("Port = " + port);
+		logger.config("Charset = " + decoder.charset().displayName());
 	}
 	
 	public void start() {

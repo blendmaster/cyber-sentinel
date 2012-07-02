@@ -11,11 +11,14 @@ import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.logging.Logger;
 
 import sate.cybersentinel.message.Message;
 
 public class InputListener {
 	public static final int DEFAULT_PORT = 275;
+	
+	private static final Logger logger = Logger.getLogger(InputListener.class.getName());
 
 	private int port;
 
@@ -25,12 +28,15 @@ public class InputListener {
 
 	public InputListener(int port) {
 		this.port = port;
+		logger.config("Port = " + port);
 	}
 
 	public void listen() {
 		try (ServerSocketChannel server = ServerSocketChannel.open()) {
 			server.socket().bind(new InetSocketAddress(port));
 			server.configureBlocking(false);
+			logger.info("Server started bound to port " + port);
+			logger.fine("Server blocking = " + server.isBlocking());
 
 			Selector selector = Selector.open();
 			SelectionKey serverKey = server.register(selector,
@@ -45,8 +51,10 @@ public class InputListener {
 					i.remove();
 
 					if (key == serverKey && key.isAcceptable()) {
+						logger.info("Selector indicates that a client is ready to be accepted");
 						SocketChannel client = server.accept();
 						client.configureBlocking(false);
+						logger.info("Found a new client at address: " + client.getRemoteAddress());
 
 						SelectionKey clientKey = client.register(selector,
 								SelectionKey.OP_READ);
@@ -66,6 +74,8 @@ public class InputListener {
 		SocketChannel client = (SocketChannel) key.channel();
 		ClientState state = (ClientState) key.attachment();
 		int length;
+		
+		logger.info("Selector indicates that data can be read from address: " + client.getRemoteAddress());
 
 		switch (state.getReceptionType()) {
 		case BLOCK:
