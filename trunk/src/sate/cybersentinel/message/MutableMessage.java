@@ -273,4 +273,19 @@ public class MutableMessage implements Message {
 		
 		return map.toString();
 	}
+
+    @Override
+    public User getUser() {
+        throw new UnsupportedOperationException("Not supported yet.");
+    }
+
+    @Override
+    public int compareTo(Object o) {
+        if( o != null && o instanceof Message)
+            {
+                Message oo = (Message)o;
+                return oo.getID() - this.getID();
+            }
+            else return -1;
+    }
 }

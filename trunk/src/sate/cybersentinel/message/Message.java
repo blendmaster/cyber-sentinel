@@ -16,7 +16,7 @@ import java.util.Date;
  * 
  * @author Jared Hance
  */
-public interface Message extends Serializable {
+public interface Message extends Serializable, Comparable {
 	public int getChannel();
 	public String getContents();
 	public Location getLocation();
@@ -25,6 +25,8 @@ public interface Message extends Serializable {
 	public String getSenderName();
 	public String getSenderUUID();
 	public Date getTime();
+        public User getUser();
+        public int getID();
 	
 	public AttributeSet getAttributeSet();
 	
@@ -37,4 +39,6 @@ public interface Message extends Serializable {
 	 * @param target The target attribute set
 	 */
 	public boolean conformsTo(AttributeSet target);
+
+    
 }

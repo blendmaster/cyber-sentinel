@@ -4,10 +4,12 @@
  */
 package sate.cybersentinel.message;
 
+import java.io.Serializable;
+
 /**
  *
  * @author tudoreanudb
  */
-public interface User {
+public interface User extends Serializable, Comparable{
     
 }
