@@ -4,6 +4,8 @@
  */
 package sate.cybersentinel.analysis;
 
+import java.io.Serializable;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import sate.cybersentinel.message.Message;
@@ -14,13 +16,40 @@ import sate.cybersentinel.message.User;
  * A user's entire interactions would be captured in multiple conversation cycles 
  * @author Isaac Osesina
  */
-public interface ConversationCycle {
+public interface ConversationCycle extends Serializable, Comparable{
+    
+    /**
+     * Subject Message of conversation
+     * @return 
+     */
+    public Message getMessage();
     
     /**
      * User (Subject) of the conversation cycle
      * @return 
      */
     public User getUser();
+    
+    /**
+     * Adds message to conversation Cycle
+     * @param message 
+     */
+    public void addMessage(Message message);
+    
+    /**
+     * Returns true if this conversation cycle contains this user
+     * @param user
+     * @return 
+     */
+    public boolean containsUser(User user);
+    
+    
+    /**
+     * Returns true if this conversation cycle contains this message
+     * @param message
+     * @return 
+     */
+    public boolean contiansMessage(Message message);
     
     /**
      * First Message of this conversation cycle
@@ -33,7 +62,7 @@ public interface ConversationCycle {
      * Time the first message was sent
      * @return time (long) the first message was sent
      */
-    public long getFirstMessageTime();
+    public Date getFirstMessageTime();
     
     /**
      * Last Message of this conversation cycle
@@ -46,7 +75,7 @@ public interface ConversationCycle {
      * Time the last message was sent
      * @return time (long) the last message was sent
      */
-    public long getLastMessageTime();
+    public Date getLastMessageTime();
     
     /**
      * All the Messages in this conversation cycle
