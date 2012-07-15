@@ -20,7 +20,9 @@ import sate.cybersentinel.message.Message;
 import sate.cybersentinel.message.MutableMessage;
 
 /**
- * DOM-Based Reader for messages exported from OpenSim
+ * DOM-Based Reader for messages exported from OpenSim. Although used for OpenSim,
+ * this is the standard xml-format for messages, so if xml serialization is required
+ * for anything else, this should be used.
  * 
  * @author Jared Hance
  */

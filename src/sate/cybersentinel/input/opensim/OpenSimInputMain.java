@@ -7,7 +7,7 @@ import java.net.UnknownHostException;
 import java.util.Arrays;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
-
+ 
 public class OpenSimInputMain {
 	private static final Logger logger = Logger.getLogger(OpenSimInputMain.class.getName());
 	

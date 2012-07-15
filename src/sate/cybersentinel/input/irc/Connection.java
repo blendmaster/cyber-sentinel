@@ -6,7 +6,7 @@ import java.math.BigInteger;
 import java.net.Socket;
 import java.security.SecureRandom;
 
-import sate.cybersentinel.input.Session;
+import sate.cybersentinel.input.protocol.Session;
 import sate.cybersentinel.message.AttributeSet;
 
 public class Connection {

@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import sate.cybersentinel.input.Block;
+import sate.cybersentinel.input.protocol.Block;
 import sate.cybersentinel.message.Message;
 import sate.cybersentinel.message.MutableMessage;
 
