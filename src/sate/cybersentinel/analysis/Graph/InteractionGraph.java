@@ -9,7 +9,8 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 import org.jgrapht.EdgeFactory;
 import org.jgrapht.graph.SimpleWeightedGraph;
-import sate.cybersentinel.message.User;
+
+import sate.cybersentinel.message.user.User;
 
 /**
  *

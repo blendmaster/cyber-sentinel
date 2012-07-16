@@ -9,7 +9,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import sate.cybersentinel.message.Message;
-import sate.cybersentinel.message.User;
+import sate.cybersentinel.message.user.User;
 
 /**
  * Conversation cycle interface for organizing individual conversation cycle.

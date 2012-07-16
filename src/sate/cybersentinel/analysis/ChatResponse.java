@@ -6,7 +6,7 @@ package sate.cybersentinel.analysis;
 
 import java.util.*;
 import sate.cybersentinel.message.Message;
-import sate.cybersentinel.message.User;
+import sate.cybersentinel.message.user.User;
 
 /**
  *
