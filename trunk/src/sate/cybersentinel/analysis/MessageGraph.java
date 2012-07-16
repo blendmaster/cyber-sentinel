@@ -1,6 +1,5 @@
 package sate.cybersentinel.analysis;
 
-<<<<<<< HEAD
 import sate.cybersentinel.analysis.Graph.InteractionGraphEdge;
 import sate.cybersentinel.analysis.Graph.InteractionGraph;
 import sate.cybersentinel.analysis.Graph.InteractionGraphVertex;
