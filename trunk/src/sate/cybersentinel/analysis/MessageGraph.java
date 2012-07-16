@@ -13,14 +13,22 @@ public class MessageGraph {
     
     private InteractionGraph graph;
     private Map<User, List<ConversationCycle>> interactions;
+    ConversationProbabilityFunction convProbFunc;
 
-    public MessageGraph(Map<User, List<ConversationCycle>> interactions) {
+    public MessageGraph(ConversationProbabilityFunction convProbFunc, Map<User, List<ConversationCycle>> interactions) {
             this.interactions = interactions;
+            this.convProbFunc = convProbFunc;
+            buildSocialNetworkGraph();
     }
-	
-    public void buildSocialNetworkGraph()
+
+    public InteractionGraph getInteractionGraph() {
+        return graph;
+    }
+    
+    
+    private void buildSocialNetworkGraph()
     {
-        if(interactions == null || interactions.isEmpty())
+        if(interactions == null || interactions.isEmpty() || convProbFunc = null)
             return;
         
         graph = new InteractionGraph(InteractionGraphEdge.class);
@@ -47,7 +55,7 @@ public class MessageGraph {
             {
                 if(cycle == null || cycle.getUserCount()==0)
                     continue;
-                conversationProbabilities = cycle.getConversationProbability(null);
+                conversationProbabilities = cycle.getConversationProbability(convProbFunc);
                 
                 if(conversationProbabilities==null || conversationProbabilities.isEmpty())
                     continue;

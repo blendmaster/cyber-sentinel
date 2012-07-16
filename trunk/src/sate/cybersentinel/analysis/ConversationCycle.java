@@ -16,7 +16,7 @@ import sate.cybersentinel.message.user.User;
  * A user's entire interactions would be captured in multiple conversation cycles 
  * @author Isaac Osesina
  */
-public interface ConversationCycle extends Serializable, Comparable{
+public interface ConversationCycle extends Serializable, Comparable<ConversationCycle>{
     
     /**
      * Subject Message of conversation
