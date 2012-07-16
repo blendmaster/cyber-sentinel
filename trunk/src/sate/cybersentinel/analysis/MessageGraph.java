@@ -112,4 +112,8 @@ public class MessageGraph {
             edge.setWeight(newWeight);
         }
     }
+    
+    public InteractionGraph getInteractionGraph() {
+    	return graph;
+    }
 }
