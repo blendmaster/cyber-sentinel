@@ -21,6 +21,7 @@ public class MessageGraph {
             buildSocialNetworkGraph();
     }
 
+    
     public InteractionGraph getInteractionGraph() {
         return graph;
     }
@@ -28,7 +29,7 @@ public class MessageGraph {
     
     private void buildSocialNetworkGraph()
     {
-        if(interactions == null || interactions.isEmpty() || convProbFunc = null)
+        if(interactions == null || interactions.isEmpty() || convProbFunc == null)
             return;
         
         graph = new InteractionGraph(InteractionGraphEdge.class);
@@ -121,7 +122,4 @@ public class MessageGraph {
         }
     }
     
-    public InteractionGraph getInteractionGraph() {
-    	return graph;
-    }
 }
