@@ -3,6 +3,8 @@ package sate.cybersentinel.message;
 import java.io.Serializable;
 import java.util.Date;
 
+import sate.cybersentinel.message.user.User;
+
 /**
  * Represents an immutable message. Because there is only a default constructor, the class
  * is an interface since such a message would have absolutely no attributes. Instead, use

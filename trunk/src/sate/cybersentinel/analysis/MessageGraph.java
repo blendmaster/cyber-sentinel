@@ -6,7 +6,8 @@ import sate.cybersentinel.analysis.Graph.InteractionGraphVertex;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import sate.cybersentinel.message.User;
+
+import sate.cybersentinel.message.user.User;
 
 public class MessageGraph {
     
@@ -105,12 +106,10 @@ public class MessageGraph {
            
             edge.setWeight(weight);
         }
-        else 
+        else
         {
             double newWeight = (weight + edge.getWeight())/(double)2;
             edge.setWeight(newWeight);
         }
-        
     }
-
 }

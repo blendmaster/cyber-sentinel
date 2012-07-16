@@ -9,7 +9,8 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 import org.jgrapht.graph.ClassBasedVertexFactory;
-import sate.cybersentinel.message.User;
+
+import sate.cybersentinel.message.user.User;
 
 /**
  *
