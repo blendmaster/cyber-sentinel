@@ -292,15 +292,10 @@ public final class ChatResponse {
         }
 
         @Override
-        public int compareTo(Object o) {
+        public int compareTo(sate.cybersentinel.analysis.ConversationCycle o) {
             
-            if( o != null && o instanceof sate.cybersentinel.analysis.ConversationCycle)
-            {
-                sate.cybersentinel.analysis.ConversationCycle oo = (sate.cybersentinel.analysis.ConversationCycle)o;
+            sate.cybersentinel.analysis.ConversationCycle oo = (sate.cybersentinel.analysis.ConversationCycle)o;
                 return (int) (oo.getMessage().getTime().getTime() - message.getTime().getTime());
-            }
-            else 
-                return Integer.MIN_VALUE;
         }
         
     }
