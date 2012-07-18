@@ -1,18 +1,11 @@
 package sate.cybersentinel.analysis;
 
-import sate.cybersentinel.analysis.Graph.InteractionGraphEdge;
-import sate.cybersentinel.analysis.Graph.InteractionGraph;
-import sate.cybersentinel.analysis.Graph.InteractionGraphVertex;
 import java.util.LinkedHashMap;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Iterator;
-
 import java.util.List;
 import java.util.Map;
-
+import sate.cybersentinel.analysis.Graph.JGraphT.InteractionGraph;
+import sate.cybersentinel.analysis.Graph.JGraphT.InteractionGraphEdge;
+import sate.cybersentinel.analysis.Graph.JGraphT.InteractionGraphVertex;
 import sate.cybersentinel.message.user.User;
 
 public class MessageGraph {
