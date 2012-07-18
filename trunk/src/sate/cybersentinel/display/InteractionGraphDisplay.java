@@ -2,44 +2,26 @@ package sate.cybersentinel.display;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Graphics;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeMap;
-
 import javax.swing.JFrame;
-import javax.swing.JScrollPane;
-
-import sate.cybersentinel.analysis.Graph.InteractionGraph;
-import sate.cybersentinel.analysis.Graph.InteractionGraphEdge;
-import sate.cybersentinel.analysis.Graph.InteractionGraphVertex;
-
-import org.gephi.graph.api.Edge;
-import org.gephi.graph.api.GraphController;
-import org.gephi.graph.api.GraphModel;
-import org.gephi.graph.api.Node;
-import org.gephi.graph.api.UndirectedGraph;
-import org.gephi.preview.api.PreviewController;
-import org.gephi.preview.api.PreviewModel;
-import org.gephi.preview.api.PreviewProperty;
-import org.gephi.preview.api.ProcessingTarget;
-import org.gephi.preview.api.RenderTarget;
+import org.gephi.graph.api.Graph;
+import org.gephi.preview.api.*;
 import org.gephi.preview.types.DependantOriginalColor;
 import org.openide.util.Lookup;
-
 import processing.core.PApplet;
-import processing.core.PGraphics;
+import sate.cybersentinel.analysis.Graph.GraphConverter;
+import sate.cybersentinel.analysis.Graph.JGraphT.InteractionGraph;
 
 public class InteractionGraphDisplay extends JFrame {
 	private InteractionGraph graph;
-	private UndirectedGraph gephiGraph;
+	private Graph gephiGraph;
 	
 	public InteractionGraphDisplay(InteractionGraph graph) {
 		this.setSize(600, 600);
 		
 		this.graph = graph;
-		
-		this.gephiGraph = GraphConverter.convert(graph);
+                
+		boolean directed = true;
+		this.gephiGraph = GraphConverter.convert(graph, directed);
 		
 		buildLayout();
 		
