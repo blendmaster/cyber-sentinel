@@ -43,10 +43,10 @@ public class InteractionGraphEdge  extends DefaultWeightedEdge {
         this.cycleCount = cycleCount;
     }
     
-    public Set<org.apache.lucene.index.TermFreqVector> getTermFreqency()
-    {
-        
-    }
+//    public Set<org.apache.lucene.index.TermFreqVector> getTermFreqency()
+//    {
+//        
+//    }
 
     @Override
     public String toString() {
