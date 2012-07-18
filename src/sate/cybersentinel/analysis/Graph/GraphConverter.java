@@ -1,23 +1,32 @@
-package sate.cybersentinel.display;
+package sate.cybersentinel.analysis.Graph;
+
+
 
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.gephi.graph.api.Edge;
-import org.gephi.graph.api.GraphController;
-import org.gephi.graph.api.GraphModel;
-import org.gephi.graph.api.Node;
-import org.gephi.graph.api.UndirectedGraph;
+import org.gephi.graph.api.*;
 import org.openide.util.Lookup;
 
-import sate.cybersentinel.analysis.Graph.InteractionGraph;
-import sate.cybersentinel.analysis.Graph.InteractionGraphEdge;
-import sate.cybersentinel.analysis.Graph.InteractionGraphVertex;
+import sate.cybersentinel.analysis.Graph.JGraphT.InteractionGraph;
+import sate.cybersentinel.analysis.Graph.JGraphT.InteractionGraphEdge;
+import sate.cybersentinel.analysis.Graph.JGraphT.InteractionGraphVertex;
 
 public class GraphConverter {
-	public static UndirectedGraph convert(InteractionGraph graph) {
+    
+	public static Graph convert(InteractionGraph graph, boolean directed) {
+            
+            if(graph == null)
+                return null;
+            
+            Graph gephiGraph;
 		GraphModel model = Lookup.getDefault().lookup(GraphController.class).getModel();
-		UndirectedGraph gephiGraph = model.getUndirectedGraph();
+                if(directed) {
+                    gephiGraph = (org.gephi.graph.api.Graph)model.getDirectedGraph();
+                }
+                else {
+                    gephiGraph =  model.getUndirectedGraph();
+                }                
 		
 		Map<InteractionGraphVertex, Node> vertexNodeMap = new TreeMap<>();
 		
