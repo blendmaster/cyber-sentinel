@@ -2,12 +2,11 @@ package sate.cybersentinel.input.opensim;
 
 import sate.cybersentinel.message.AttributeSet;
 
-public class OpenSimGlobalChatAttributeSet implements AttributeSet {
-	private static final long serialVersionUID = 2038392533740524171L;
+public class OpenSimPrivateChatAttributeSet implements AttributeSet {
 
 	@Override
 	public boolean hasChannel() {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -22,7 +21,7 @@ public class OpenSimGlobalChatAttributeSet implements AttributeSet {
 
 	@Override
 	public boolean hasLocation() {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -37,11 +36,11 @@ public class OpenSimGlobalChatAttributeSet implements AttributeSet {
 
 	@Override
 	public boolean hasReceiverName() {
-		return false;
+		return true;
 	}
 
 	@Override
 	public boolean hasReceiverUUID() {
-		return false;
+		return true;
 	}
 }
