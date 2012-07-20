@@ -1,13 +1,16 @@
 package sate.cybersentinel.message.user;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+
+import sate.cybersentinel.message.Message;
 
 public final class UserManager {
 	private UserManager() { }
 	
-	private static Map<String, User> userMap;
+	private static Map<String, User> userMap = new HashMap<String, User>();
 	
 	/**
 	 * Gets the user with a specified uuid. If no such user currently exists in the
@@ -37,5 +40,15 @@ public final class UserManager {
 	
 	public static Set<String> getAllUUIDs() {
 		return userMap.keySet();
+	}
+	
+	/**
+	 * Ensures that all users are in the userMap for getAllUsers/getAllUUIDs
+	 * @param messages
+	 */
+	public static void process(Iterable<Message> messages) {
+		for(Message m : messages) {
+			m.getUser();
+		}
 	}
 }

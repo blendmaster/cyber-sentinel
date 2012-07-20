@@ -8,6 +8,14 @@ public class DefaultUser implements User {
 		this.uuid = uuid;
 		this.name = name;
 	}
+	
+	@Override
+	public boolean equals(Object other) {
+		if(other instanceof User) {
+			return this.uuid.equals(((User) other).getUUID());
+		}
+		return false;
+	}
 
 	@Override
 	public int compareTo(User other) {

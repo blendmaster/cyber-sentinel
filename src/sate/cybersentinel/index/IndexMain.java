@@ -8,9 +8,16 @@ import java.util.logging.Logger;
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.queryparser.flexible.core.QueryNodeException;
 
+import sate.cybersentinel.analysis.ChatResponse;
+import sate.cybersentinel.analysis.ConversationProbabilityFunction;
+import sate.cybersentinel.analysis.DirectMessageGraph;
+import sate.cybersentinel.analysis.LogLogisticDistribution;
+import sate.cybersentinel.analysis.MessageGraph;
+import sate.cybersentinel.analysis.Graph.JGraphT.InteractionGraph;
 import sate.cybersentinel.input.opensim.OpenSimGlobalChatAttributeSet;
 import sate.cybersentinel.message.Message;
 import sate.cybersentinel.message.filter.AttributeFilter;
+import sate.cybersentinel.message.user.UserManager;
 
 public class IndexMain {
 	private static Logger logger = Logger.getLogger(IndexMain.class.getName());
@@ -53,6 +60,20 @@ public class IndexMain {
 		}
 		
 		System.out.println(messages);
+		UserManager.process(messages);
+		
+		System.out.print("\n\n\n===== ANALYZING DIRECT MESSAGES =====\n\n\n");
+		
+		DirectMessageGraph directMessageGraph = new DirectMessageGraph(messages, index);
+		InteractionGraph directMessageInteractions = directMessageGraph.getInteractionGraph();
+		System.out.println(directMessageInteractions);
+		
+		System.out.print("\n\n\n===== ANALYZING CONVERSATION CYCLE =====\n\n\n");
+		
+		ChatResponse response = new ChatResponse(messages);
+		MessageGraph messageGraph = new MessageGraph(new LogLogisticDistribution(0.5, 0.5), response.getInteractions());
+		InteractionGraph conversationCycleInteractions = messageGraph.getInteractionGraph();
+		System.out.println(conversationCycleInteractions);
 	}
 	
 	public static void help() {
