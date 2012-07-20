@@ -10,9 +10,9 @@ package sate.cybersentinel.analysis;
  * @author Isaac
  */
 public class LogLogisticDistribution implements ConversationProbabilityFunction {
-	private static final double DEFAULT_ALPHA = 12000.0;
-	private static final double DEFAULT_BETA = 2.0;
-	
+	private static final double DEFAULT_ALPHA = 12000.0; // median of response time distribution from music brainz
+	private static final double DEFAULT_BETA = 2.0; // distribution shape parameter
+
     private double alpha;
     private double beta;
 
