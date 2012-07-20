@@ -22,7 +22,7 @@ import sate.cybersentinel.message.user.User;
  * 
  * @author Jared Hance
  */
-public interface Message extends Serializable, Comparable {
+public interface Message extends Serializable, Comparable<Message> {
 	public int getChannel();
 	public String getContents();
 	public Location getLocation();
