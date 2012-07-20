@@ -17,6 +17,7 @@ import sate.cybersentinel.analysis.Graph.JGraphT.InteractionGraph;
 import sate.cybersentinel.analysis.technique.AnalysisTechnique;
 import sate.cybersentinel.analysis.technique.ConversationCycleAnalysisTechnique;
 import sate.cybersentinel.analysis.technique.DirectMessagingAnalysisTechnique;
+import sate.cybersentinel.analysis.technique.PrivateMessageAnalysisTechnique;
 import sate.cybersentinel.input.opensim.OpenSimGlobalChatAttributeSet;
 import sate.cybersentinel.input.opensim.OpenSimPrivateChatAttributeSet;
 import sate.cybersentinel.message.Message;
@@ -74,8 +75,8 @@ public class IndexMain {
 		
 		
 		System.out.print("\n\n\n===== ANALYZING DIRECT MESSAGES =====\n\n\n");
-		AnalysisTechnique directAnalysisTechnqiue = new DirectMessagingAnalysisTechnique();
-		InteractionGraph directMessageInteractions = directAnalysisTechnqiue.analyze(globals);
+		AnalysisTechnique directAnalysisTechnique = new DirectMessagingAnalysisTechnique();
+		InteractionGraph directMessageInteractions = directAnalysisTechnique.analyze(globals);
 		System.out.println(directMessageInteractions);
 		
 		System.out.print("\n\n\n===== ANALYZING CONVERSATION CYCLE =====\n\n\n");
@@ -83,7 +84,10 @@ public class IndexMain {
 		InteractionGraph conversationCycleInteractions = conversationCycleAnalysisTechnique.analyze(globals);
 		System.out.println(conversationCycleInteractions);
 		
-		//System.out.print("\n\n\n===== ANALYZING PRIVATE MESSAGES =====\n\n\n");
+		System.out.print("\n\n\n===== ANALYZING PRIVATE MESSAGES =====\n\n\n");
+		AnalysisTechnique privateAnalysisTechnique = new PrivateMessageAnalysisTechnique();
+		InteractionGraph privateInteractions = privateAnalysisTechnique.analyze(privates);
+		System.out.println(privateInteractions);
 	}
 	
 	public static void help() {

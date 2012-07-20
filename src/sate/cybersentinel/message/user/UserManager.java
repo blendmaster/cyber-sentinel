@@ -2,6 +2,7 @@ package sate.cybersentinel.message.user;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -34,8 +35,13 @@ public final class UserManager {
 		return userMap.get(uuid);
 	}
 	
-	public static Collection<User> getAllUsers() {
-		return userMap.values();
+	public static Set<User> getAllUsers() {
+		Set<User> s = new HashSet<User>();
+		for(User u : userMap.values()) {
+			s.add(u);
+		}
+		
+		return s;
 	}
 	
 	public static Set<String> getAllUUIDs() {
@@ -49,6 +55,14 @@ public final class UserManager {
 	public static void process(Iterable<Message> messages) {
 		for(Message m : messages) {
 			m.getUser();
+			if(m.getAttributeSet().hasReceiverUUID()) {
+				if(m.getAttributeSet().hasReceiverName()) {
+					getUserOrCreate(m.getReceiverUUID(), m.getReceiverName());
+				}
+				else {
+					getUserOrCreate(m.getReceiverUUID(), m.getReceiverUUID());
+				}
+			}
 		}
 	}
 }
