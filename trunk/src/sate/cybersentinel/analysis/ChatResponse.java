@@ -28,8 +28,7 @@ public final class ChatResponse {
 
     public List<Message> getMessages() {
         return messages;
-    }   
-    
+    }
     
     private void resolveInteractions()
     {

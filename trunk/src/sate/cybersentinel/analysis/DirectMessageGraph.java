@@ -22,10 +22,19 @@ public class DirectMessageGraph {
 	private InteractionGraph graph;
 	private MessageIndex index;
 
+	/**
+	 * Creates a DirectMessageGraph not bound by any index.
+	 * @param messages
+	 */
 	public DirectMessageGraph(List<Message> messages) {
 		this(messages, null);
 	}
 
+	/**
+	 * Creates a DirectMessageGraph bound by an index. Faster.
+	 * @param messages
+	 * @param index The read-only index to use.
+	 */
 	public DirectMessageGraph(List<Message> messages, MessageIndex index) {
 		this.messages = messages;
 		this.index = index;
@@ -45,6 +54,7 @@ public class DirectMessageGraph {
 			this.graph.addVertex(vertex);
 		}
 
+		System.out.println(UserManager.getAllUsers());
 		for (User from : UserManager.getAllUsers()) {
 			for (User to : UserManager.getAllUsers()) {
 				if (from == to)
@@ -52,6 +62,7 @@ public class DirectMessageGraph {
 
 				int count = getMessages(from, to);
 				if (count != 0) {
+					System.out.println(from.getName());
 					InteractionGraphVertex vFrom = graph.getUserVertex(from);
 					InteractionGraphVertex vTo = graph.getUserVertex(to);
 					InteractionGraphEdge edge = graph.addEdge(vFrom, vTo);
@@ -62,16 +73,17 @@ public class DirectMessageGraph {
 	}
 
 	private int getMessages(User from, User to) {
-		if (index != null) {
+		/*if (index != null) {
 			try {
-				String q = "senderUUID\"" + from.getUUID() + "\""
+				String q = "senderUUID:\"" + from.getUUID() + "\""
 						+ " AND contents:\"" + to.getName() + "\"";
-				return index.query(q, Integer.MAX_VALUE).size();
+				System.out.println(q);
+				return index.query(q, 100000).size();
 			} catch (IOException | QueryNodeException e) {
 				e.printStackTrace();
 				throw new ImpossibleCodeExecutionException();
 			}
-		} else {
+		} else {*/
 			int count = 0;
 			for (Message message : messages) {
 				if (message.getUser().equals(from)) {
@@ -81,6 +93,6 @@ public class DirectMessageGraph {
 				}
 			}
 			return count;
-		}
+		//}
 	}
 }

@@ -281,12 +281,15 @@ public class MutableMessage implements Message {
 	}
 
 	@Override
+	/**
+	 * Needs to be called at least once to add the message to the database.
+	 */
 	public User getUser() {
-		if(hasReceiverUUID && hasReceiverName) {
-			return UserManager.getUserOrCreate(receiverUUID, receiverName);
+		if(hasSenderUUID && hasSenderName) {
+			return UserManager.getUserOrCreate(senderUUID, senderName);
 		}
-		else if(hasReceiverUUID) {
-			return UserManager.getUserOrCreate(receiverUUID, receiverUUID);
+		else if(hasSenderUUID) {
+			return UserManager.getUserOrCreate(senderUUID, senderUUID);
 		}
 		else {
 			throw new ImpossibleCodeExecutionException("Message doesn't have UUID. This is probably a bug.");
