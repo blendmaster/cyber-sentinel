@@ -32,7 +32,7 @@ public interface Message extends Serializable, Comparable<Message> {
 	public String getSenderUUID();
 	public Date getTime();
     public User getUser();
-    public int getID();
+    public String getID();
 	
 	public AttributeSet getAttributeSet();
 	
