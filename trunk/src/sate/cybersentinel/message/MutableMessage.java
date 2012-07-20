@@ -5,6 +5,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import sate.cybersentinel.message.user.User;
+import sate.cybersentinel.message.user.UserManager;
+import sate.cybersentinel.util.ImpossibleCodeExecutionException;
 
 /**
  * Used to create a Message. In contrast to Message, which has `get` method for
@@ -280,7 +282,15 @@ public class MutableMessage implements Message {
 
 	@Override
 	public User getUser() {
-		throw new UnsupportedOperationException("Not supported yet.");
+		if(hasReceiverUUID && hasReceiverName) {
+			return UserManager.getUserOrCreate(receiverUUID, receiverName);
+		}
+		else if(hasReceiverUUID) {
+			return UserManager.getUserOrCreate(receiverUUID, receiverUUID);
+		}
+		else {
+			throw new ImpossibleCodeExecutionException("Message doesn't have UUID. This is probably a bug.");
+		}
 	}
 
 	@Override

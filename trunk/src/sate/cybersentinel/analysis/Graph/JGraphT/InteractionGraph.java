@@ -87,5 +87,7 @@ public class InteractionGraph extends SimpleWeightedGraph<InteractionGraphVertex
         return vertexMap;
     }
     
-
+    public InteractionGraphVertex getUserVertex(User user) {
+    	return vertexMap.get(user);
+    }
 }

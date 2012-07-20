@@ -14,6 +14,11 @@ public class DefaultUser implements User {
 		return this.uuid.compareTo(other.getUUID());
 	}
 	
+	@Override
+	public int hashCode() {
+		return this.uuid.hashCode();
+	}
+	
 	public String getUUID() {
 		return this.uuid;
 	}
