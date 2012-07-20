@@ -14,9 +14,14 @@ import sate.cybersentinel.analysis.DirectMessageGraph;
 import sate.cybersentinel.analysis.LogLogisticDistribution;
 import sate.cybersentinel.analysis.MessageGraph;
 import sate.cybersentinel.analysis.Graph.JGraphT.InteractionGraph;
+import sate.cybersentinel.analysis.technique.AnalysisTechnique;
+import sate.cybersentinel.analysis.technique.ConversationCycleAnalysisTechnique;
+import sate.cybersentinel.analysis.technique.DirectMessagingAnalysisTechnique;
 import sate.cybersentinel.input.opensim.OpenSimGlobalChatAttributeSet;
+import sate.cybersentinel.input.opensim.OpenSimPrivateChatAttributeSet;
 import sate.cybersentinel.message.Message;
 import sate.cybersentinel.message.filter.AttributeFilter;
+import sate.cybersentinel.message.filter.MessageFilter;
 import sate.cybersentinel.message.user.UserManager;
 
 public class IndexMain {
@@ -36,7 +41,7 @@ public class IndexMain {
 		
 		try {
 			index = new LocalMessageIndex(new File(loc));
-			index.addFilter(new AttributeFilter(new OpenSimGlobalChatAttributeSet()));
+			//index.addFilter(new AttributeFilter(new OpenSimGlobalChatAttributeSet()));
 		} catch (CorruptIndexException e) {
 			logger.severe("Corrupted index at; " + loc);
 			e.printStackTrace();
@@ -59,21 +64,26 @@ public class IndexMain {
 			e.printStackTrace();
 		}
 		
-		System.out.println(messages);
-		UserManager.process(messages);
+		MessageFilter globalFilter = new AttributeFilter(new OpenSimGlobalChatAttributeSet());
+		MessageFilter privateFilter = new AttributeFilter(new OpenSimPrivateChatAttributeSet());
+		List<Message> globals = globalFilter.filter(messages);
+		List<Message> privates = privateFilter.filter(messages);
+		
+		UserManager.process(globals);
+		UserManager.process(privates);
+		
 		
 		System.out.print("\n\n\n===== ANALYZING DIRECT MESSAGES =====\n\n\n");
-		
-		DirectMessageGraph directMessageGraph = new DirectMessageGraph(messages, index);
-		InteractionGraph directMessageInteractions = directMessageGraph.getInteractionGraph();
+		AnalysisTechnique directAnalysisTechnqiue = new DirectMessagingAnalysisTechnique();
+		InteractionGraph directMessageInteractions = directAnalysisTechnqiue.analyze(globals);
 		System.out.println(directMessageInteractions);
 		
 		System.out.print("\n\n\n===== ANALYZING CONVERSATION CYCLE =====\n\n\n");
-		
-		ChatResponse response = new ChatResponse(messages);
-		MessageGraph messageGraph = new MessageGraph(new LogLogisticDistribution(0.5, 0.5), response.getInteractions());
-		InteractionGraph conversationCycleInteractions = messageGraph.getInteractionGraph();
+		AnalysisTechnique conversationCycleAnalysisTechnique = new ConversationCycleAnalysisTechnique();
+		InteractionGraph conversationCycleInteractions = conversationCycleAnalysisTechnique.analyze(globals);
 		System.out.println(conversationCycleInteractions);
+		
+		//System.out.print("\n\n\n===== ANALYZING PRIVATE MESSAGES =====\n\n\n");
 	}
 	
 	public static void help() {
