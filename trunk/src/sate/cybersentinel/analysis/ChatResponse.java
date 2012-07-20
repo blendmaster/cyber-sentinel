@@ -113,16 +113,15 @@ public final class ChatResponse {
         @Override
         public void addMessage(Message message) {
             
-            if(message == null)
+            if(message == null || isAddable(message))
                 return;
             
-            if( messages == null && isAddable(message) )
+            if( messages == null )
             {
                 messages = new ArrayList<Message>();
             }
             
-            if( isAddable(message) )
-                messages.add(message);
+            messages.add(message);
         }
         
         private boolean isAddable(Message message)
@@ -131,10 +130,15 @@ public final class ChatResponse {
                     message.getUser() == getUser() )
                 return false;
             
-            if( messages.contains(message) )
+            boolean isOlder = message.getTime().getTime() > this.message.getTime().getTime();
+            
+            if(!isOlder)
                 return false;
             
-            return message.getTime().getTime() > this.message.getTime().getTime();
+            if( messages == null || !messages.contains(message) )
+                return true;            
+            
+            return isOlder;
         }
 
         @Override
