@@ -11,7 +11,7 @@ import sate.cybersentinel.message.Message;
 public class ConversationCycleAnalysisTechnique implements AnalysisTechnique {
 	public InteractionGraph analyze(List<Message> messages) {
 		ChatResponse response = new ChatResponse(messages);
-		MessageGraph messageGraph = new MessageGraph(new LogLogisticDistribution(12000, 2), response.getInteractions());
+		MessageGraph messageGraph = new MessageGraph(new LogLogisticDistribution(), response.getInteractions());
 		return messageGraph.getInteractionGraph();
 	}
 }

@@ -10,9 +10,15 @@ package sate.cybersentinel.analysis;
  * @author Isaac
  */
 public class LogLogisticDistribution implements ConversationProbabilityFunction {
+	private static double DEFAULT_ALPHA = 12000.0;
+	private static double DEFAULT_BETA = 2.0;
+	
     private double alpha;
     private double beta;
 
+    public LogLogisticDistribution() {
+    	this(DEFAULT_ALPHA, DEFAULT_BETA);
+    }
     public LogLogisticDistribution(double alpha, double beta) {
         this.alpha = alpha;
         this.beta = beta;
