@@ -1,5 +1,6 @@
 package sate.cybersentinel.message;
 
+import java.text.DateFormat;
 import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
@@ -300,12 +301,11 @@ public class MutableMessage implements Message {
 	public int compareTo(Message o) {
             if(o == null)
                 return -1;
-            return o.getID() - this.getID();
+            return this.getID().compareTo(o.getID());
 	}
 
 	@Override
-	public int getID() {
-		// TODO Auto-generated method stub
-		return 0;
+	public String getID() {
+		return this.getReceiverUUID() + DateFormat.getDateInstance().format(time);
 	}
 }

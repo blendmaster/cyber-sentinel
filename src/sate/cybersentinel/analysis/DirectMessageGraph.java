@@ -54,7 +54,6 @@ public class DirectMessageGraph {
 			this.graph.addVertex(vertex);
 		}
 
-		System.out.println(UserManager.getAllUsers());
 		for (User from : UserManager.getAllUsers()) {
 			for (User to : UserManager.getAllUsers()) {
 				if (from == to)
@@ -62,11 +61,16 @@ public class DirectMessageGraph {
 
 				int count = getMessages(from, to);
 				if (count != 0) {
-					System.out.println(from.getName());
 					InteractionGraphVertex vFrom = graph.getUserVertex(from);
 					InteractionGraphVertex vTo = graph.getUserVertex(to);
-					InteractionGraphEdge edge = graph.addEdge(vFrom, vTo);
-					edge.setWeight(Math.tanh(count));
+					InteractionGraphEdge existingEdge = graph.getEdge(vFrom, vTo);
+					if(existingEdge == null) {
+						InteractionGraphEdge edge = graph.addEdge(vFrom, vTo);
+						edge.setWeight((double) count);
+					}
+					else {
+						existingEdge.incrementWeight((double) count);
+					}
 				}
 			}
 		}
