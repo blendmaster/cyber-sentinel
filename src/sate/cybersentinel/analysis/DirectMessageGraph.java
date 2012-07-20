@@ -1,0 +1,86 @@
+package sate.cybersentinel.analysis;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.queryparser.flexible.core.QueryNodeException;
+
+import sate.cybersentinel.analysis.Graph.JGraphT.InteractionGraph;
+import sate.cybersentinel.analysis.Graph.JGraphT.InteractionGraphEdge;
+import sate.cybersentinel.analysis.Graph.JGraphT.InteractionGraphVertex;
+import sate.cybersentinel.index.MessageIndex;
+import sate.cybersentinel.message.Message;
+import sate.cybersentinel.message.user.User;
+import sate.cybersentinel.message.user.UserManager;
+import sate.cybersentinel.util.ImpossibleCodeExecutionException;
+
+public class DirectMessageGraph {
+	private List<Message> messages;
+	private InteractionGraph graph;
+	private MessageIndex index;
+
+	public DirectMessageGraph(List<Message> messages) {
+		this(messages, null);
+	}
+
+	public DirectMessageGraph(List<Message> messages, MessageIndex index) {
+		this.messages = messages;
+		this.index = index;
+
+		buildGraph();
+	}
+
+	public InteractionGraph getInteractionGraph() {
+		return this.graph;
+	}
+
+	private void buildGraph() {
+		this.graph = new InteractionGraph(InteractionGraphEdge.class);
+
+		for (User user : UserManager.getAllUsers()) {
+			InteractionGraphVertex vertex = new InteractionGraphVertex(user);
+			this.graph.addVertex(vertex);
+		}
+
+		for (User from : UserManager.getAllUsers()) {
+			for (User to : UserManager.getAllUsers()) {
+				if (from == to)
+					continue;
+
+				int count = getMessages(from, to);
+				if (count != 0) {
+					InteractionGraphVertex vFrom = graph.getUserVertex(from);
+					InteractionGraphVertex vTo = graph.getUserVertex(to);
+					InteractionGraphEdge edge = graph.addEdge(vFrom, vTo);
+					edge.setWeight(Math.tanh(count));
+				}
+			}
+		}
+	}
+
+	private int getMessages(User from, User to) {
+		if (index != null) {
+			try {
+				String q = "senderUUID\"" + from.getUUID() + "\""
+						+ " AND contents:\"" + to.getName() + "\"";
+				return index.query(q, Integer.MAX_VALUE).size();
+			} catch (IOException | QueryNodeException e) {
+				e.printStackTrace();
+				throw new ImpossibleCodeExecutionException();
+			}
+		} else {
+			int count = 0;
+			for (Message message : messages) {
+				if (message.getUser().equals(from)) {
+					if (message.getContents().contains(to.getName())) {
+						count++;
+					}
+				}
+			}
+			return count;
+		}
+	}
+}

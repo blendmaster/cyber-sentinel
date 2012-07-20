@@ -31,8 +31,8 @@ public interface Message extends Serializable, Comparable {
 	public String getSenderName();
 	public String getSenderUUID();
 	public Date getTime();
-        public User getUser();
-        public int getID();
+    public User getUser();
+    public int getID();
 	
 	public AttributeSet getAttributeSet();
 	

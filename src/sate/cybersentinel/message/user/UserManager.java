@@ -1,6 +1,8 @@
 package sate.cybersentinel.message.user;
 
+import java.util.Collection;
 import java.util.Map;
+import java.util.Set;
 
 public final class UserManager {
 	private UserManager() { }
@@ -27,5 +29,13 @@ public final class UserManager {
 	
 	public static User getUser(String uuid) {
 		return userMap.get(uuid);
+	}
+	
+	public static Collection<User> getAllUsers() {
+		return userMap.values();
+	}
+	
+	public static Set<String> getAllUUIDs() {
+		return userMap.keySet();
 	}
 }
