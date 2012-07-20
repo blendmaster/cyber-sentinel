@@ -294,12 +294,10 @@ public class MutableMessage implements Message {
 	}
 
 	@Override
-	public int compareTo(Object o) {
-		if (o != null && o instanceof Message) {
-			Message oo = (Message) o;
-			return oo.getID() - this.getID();
-		} else
-			return -1;
+	public int compareTo(Message o) {
+            if(o == null)
+                return -1;
+            return o.getID() - this.getID();
 	}
 
 	@Override
