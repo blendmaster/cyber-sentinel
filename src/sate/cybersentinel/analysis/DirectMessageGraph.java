@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Logger;
 
 import org.apache.lucene.analysis.Analyzer;
 import org.apache.lucene.analysis.standard.StandardAnalyzer;
@@ -34,6 +35,8 @@ import sate.cybersentinel.message.user.User;
 import sate.cybersentinel.message.user.UserManager;
 
 public class DirectMessageGraph {
+	private static Logger logger = Logger.getLogger(DirectMessageGraph.class.getName());
+	
 	private List<Message> messages;
 	private InteractionGraph graph;
 	
@@ -57,6 +60,7 @@ public class DirectMessageGraph {
 	}
 	
 	private void buildIndex() {
+		logger.info("Building global message index for direct message graph");
 		Analyzer analyzer = new StandardAnalyzer(Version.LUCENE_40);
 		IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_40, analyzer);
 		Directory directory = new RAMDirectory();
@@ -90,6 +94,7 @@ public class DirectMessageGraph {
 			e.printStackTrace();
 		}
 		this.searcher = new IndexSearcher(reader);
+		logger.info("Finished building index");
 	}
 
 	private void buildGraph() {
@@ -123,19 +128,26 @@ public class DirectMessageGraph {
 	}
 
 	private int getMessages(User from, User to) {
-		FuzzyQuery fuzzy = new FuzzyQuery(new Term("contents", to.getName()));
-		TermQuery term = new TermQuery(new Term("senderUUID", from.getUUID()));
-		BooleanQuery query = new BooleanQuery();
-		query.add(fuzzy, Occur.MUST);
-		query.add(term, Occur.MUST);
-		
-		try {
-			return searcher.search(query, 10000).scoreDocs.length;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return -1;
+		int count = 0;
+		String[] names = to.getName().split(" ");
+		for(String name : names) {
+			FuzzyQuery fuzzy = new FuzzyQuery(
+					new Term("contents", name));
+			TermQuery term = new TermQuery(new Term("senderUUID",
+					from.getUUID()));
+			BooleanQuery query = new BooleanQuery();
+			query.add(fuzzy, Occur.MUST);
+			query.add(term, Occur.MUST);
+
+			try {
+				count += searcher.search(query, 10000).scoreDocs.length;
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
+		
+		return count;
 /*
 		int count = 0;
 		for (Message message : messages) {
