@@ -3,6 +3,8 @@ package sate.cybersentinel.message;
 import java.io.Serializable;
 import java.util.Date;
 
+import org.apache.lucene.index.Terms;
+
 import sate.cybersentinel.message.user.User;
 
 /**
@@ -46,6 +48,4 @@ public interface Message extends Serializable, Comparable<Message> {
 	 * @param target The target attribute set
 	 */
 	public boolean conformsTo(AttributeSet target);
-
-    
 }

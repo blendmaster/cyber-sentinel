@@ -41,7 +41,7 @@ public class LocalMessageIndex implements MessageIndex {
 		this.parser = new StandardQueryParser(new StandardAnalyzer(
 				Version.LUCENE_40));
 		this.searcher = new IndexSearcher(reader);
-		this.converter = new DocumentConverter(searcher);
+		this.converter = new DocumentConverter(reader, searcher);
 	}
 
 	public List<Message> query(Query query, int hits)
