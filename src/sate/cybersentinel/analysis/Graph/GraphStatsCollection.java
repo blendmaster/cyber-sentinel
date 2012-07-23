@@ -67,7 +67,7 @@ public class GraphStatsCollection  implements GraphStats{
 
     public GraphStatsCollection(InteractionGraph g, boolean directed) {
         
-        pc.deleteWorkspace(workspace);
+        pc.deleteWorkspace(pc.getCurrentWorkspace());
         pc.newProject();
         workspace = pc.getCurrentWorkspace();
         
@@ -202,11 +202,11 @@ public class GraphStatsCollection  implements GraphStats{
         
         if(modularity!=null)
             return modularity;
-        
+        /*
         pc.cleanWorkspace(workspace);
         
         System.runFinalization();
-        System.gc();
+        System.gc();*/
         if(graphModel != null) {
             modularity = new Modularity();
             modularity.setRandom(true);

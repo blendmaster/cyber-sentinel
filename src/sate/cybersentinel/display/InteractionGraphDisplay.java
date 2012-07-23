@@ -2,16 +2,25 @@ package sate.cybersentinel.display;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.util.logging.Logger;
+
 import javax.swing.JFrame;
 import org.gephi.graph.api.Graph;
+import org.gephi.io.importer.api.Container;
+import org.gephi.io.importer.api.ContainerFactory;
+import org.gephi.io.importer.api.ImportController;
 import org.gephi.preview.api.*;
 import org.gephi.preview.types.DependantOriginalColor;
+import org.gephi.project.api.ProjectController;
+import org.gephi.project.api.Workspace;
 import org.openide.util.Lookup;
 import processing.core.PApplet;
 import sate.cybersentinel.analysis.Graph.GraphConverter;
 import sate.cybersentinel.analysis.Graph.JGraphT.InteractionGraph;
 
 public class InteractionGraphDisplay extends JFrame {
+	private Logger logger = Logger.getLogger(InteractionGraphDisplay.class.getName());
+	
 	private InteractionGraph graph;
 	private Graph gephiGraph;
 	
@@ -30,6 +39,9 @@ public class InteractionGraphDisplay extends JFrame {
 	}
 	
 	public void buildLayout() {
+		//ProjectController project = Lookup.getDefault().lookup(ProjectController.class);
+		//project.getCurrentWorkspace();
+		
 		PreviewController pController = Lookup.getDefault().lookup(PreviewController.class);
 		PreviewModel pModel = pController.getModel();
 		pModel.getProperties().putValue(PreviewProperty.SHOW_EDGE_LABELS, true);
