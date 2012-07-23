@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.apache.lucene.document.Document;
 import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.IndexReader;
 import org.apache.lucene.index.IndexableField;
 import org.apache.lucene.search.IndexSearcher;
 import org.apache.lucene.search.ScoreDoc;
@@ -18,9 +19,11 @@ import sate.cybersentinel.message.filter.MessageFilter;
 
 public class DocumentConverter {
 	private IndexSearcher searcher;
+	private IndexReader reader;
 	private List<MessageFilter> filters;
 	
-	public DocumentConverter(IndexSearcher searcher) {
+	public DocumentConverter(IndexReader reader, IndexSearcher searcher) {
+		this.reader = reader;
 		this.searcher = searcher;
 		this.filters = new ArrayList<>();
 	}

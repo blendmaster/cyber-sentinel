@@ -3,9 +3,11 @@ package sate.cybersentinel.index;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Logger;
 
 import org.apache.lucene.index.CorruptIndexException;
+import org.apache.lucene.index.Terms;
 import org.apache.lucene.queryparser.flexible.core.QueryNodeException;
 
 import sate.cybersentinel.analysis.ChatResponse;
@@ -27,22 +29,23 @@ import sate.cybersentinel.message.user.UserManager;
 
 public class IndexMain {
 	private static Logger logger = Logger.getLogger(IndexMain.class.getName());
-	
+
 	public static void main(String[] args) {
-		if(args.length < 3) {
+		if (args.length < 3) {
 			help();
 			System.exit(0);
 		}
-		
+
 		String loc = args[0];
 		String query = args[1];
 		int hits = Integer.parseInt(args[2]);
-		
+
 		MessageIndex index = null;
-		
+
 		try {
 			index = new LocalMessageIndex(new File(loc));
-			//index.addFilter(new AttributeFilter(new OpenSimGlobalChatAttributeSet()));
+			// index.addFilter(new AttributeFilter(new
+			// OpenSimGlobalChatAttributeSet()));
 		} catch (CorruptIndexException e) {
 			logger.severe("Corrupted index at; " + loc);
 			e.printStackTrace();
@@ -50,7 +53,7 @@ public class IndexMain {
 			logger.severe("Could not open index at: " + loc);
 			e.printStackTrace();
 		}
-		
+
 		List<Message> messages = null;
 		try {
 			messages = index.query(query, hits);
@@ -64,32 +67,40 @@ public class IndexMain {
 			logger.severe("IO Failure at index at: " + loc);
 			e.printStackTrace();
 		}
-		
-		MessageFilter globalFilter = new AttributeFilter(new OpenSimGlobalChatAttributeSet());
-		MessageFilter privateFilter = new AttributeFilter(new OpenSimPrivateChatAttributeSet());
+
+		logger.info("Filtering");
+		MessageFilter globalFilter = new AttributeFilter(
+				new OpenSimGlobalChatAttributeSet());
+		MessageFilter privateFilter = new AttributeFilter(
+				new OpenSimPrivateChatAttributeSet());
 		List<Message> globals = globalFilter.filter(messages);
 		List<Message> privates = privateFilter.filter(messages);
-		
+
+		logger.info("Processing global messages");
 		UserManager.process(globals);
+		logger.info("Processing private messages");
 		UserManager.process(privates);
-		
-		
+
 		System.out.print("\n\n\n===== ANALYZING DIRECT MESSAGES =====\n\n\n");
 		AnalysisTechnique directAnalysisTechnique = new DirectMessagingAnalysisTechnique();
-		InteractionGraph directMessageInteractions = directAnalysisTechnique.analyze(globals);
+		InteractionGraph directMessageInteractions = directAnalysisTechnique
+				.analyze(globals);
 		System.out.println(directMessageInteractions);
-		
-		System.out.print("\n\n\n===== ANALYZING CONVERSATION CYCLE =====\n\n\n");
+
+		System.out
+				.print("\n\n\n===== ANALYZING CONVERSATION CYCLE =====\n\n\n");
 		AnalysisTechnique conversationCycleAnalysisTechnique = new ConversationCycleAnalysisTechnique();
-		InteractionGraph conversationCycleInteractions = conversationCycleAnalysisTechnique.analyze(globals);
+		InteractionGraph conversationCycleInteractions = conversationCycleAnalysisTechnique
+				.analyze(globals);
 		System.out.println(conversationCycleInteractions);
-		
+
 		System.out.print("\n\n\n===== ANALYZING PRIVATE MESSAGES =====\n\n\n");
 		AnalysisTechnique privateAnalysisTechnique = new PrivateMessageAnalysisTechnique();
-		InteractionGraph privateInteractions = privateAnalysisTechnique.analyze(privates);
+		InteractionGraph privateInteractions = privateAnalysisTechnique
+				.analyze(privates);
 		System.out.println(privateInteractions);
 	}
-	
+
 	public static void help() {
 		System.out.println("Usage: IndexMain <Location> <Query> <Hits>");
 	}
