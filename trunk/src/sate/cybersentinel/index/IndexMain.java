@@ -6,20 +6,30 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import javax.swing.JFrame;
+import javax.swing.JTextArea;
+
 import org.apache.lucene.index.CorruptIndexException;
 import org.apache.lucene.index.Terms;
 import org.apache.lucene.queryparser.flexible.core.QueryNodeException;
+import org.gephi.graph.api.Graph;
+import org.gephi.io.exporter.api.ExportController;
+import org.gephi.project.api.ProjectController;
+import org.openide.util.Lookup;
 
 import sate.cybersentinel.analysis.ChatResponse;
 import sate.cybersentinel.analysis.ConversationProbabilityFunction;
 import sate.cybersentinel.analysis.DirectMessageGraph;
 import sate.cybersentinel.analysis.LogLogisticDistribution;
 import sate.cybersentinel.analysis.MessageGraph;
+import sate.cybersentinel.analysis.Graph.GraphConverter;
+import sate.cybersentinel.analysis.Graph.GraphStatsCollection;
 import sate.cybersentinel.analysis.Graph.JGraphT.InteractionGraph;
 import sate.cybersentinel.analysis.technique.AnalysisTechnique;
 import sate.cybersentinel.analysis.technique.ConversationCycleAnalysisTechnique;
 import sate.cybersentinel.analysis.technique.DirectMessagingAnalysisTechnique;
 import sate.cybersentinel.analysis.technique.PrivateMessageAnalysisTechnique;
+import sate.cybersentinel.display.InteractionGraphDisplay;
 import sate.cybersentinel.input.opensim.OpenSimGlobalChatAttributeSet;
 import sate.cybersentinel.input.opensim.OpenSimPrivateChatAttributeSet;
 import sate.cybersentinel.message.Message;
@@ -99,6 +109,22 @@ public class IndexMain {
 		InteractionGraph privateInteractions = privateAnalysisTechnique
 				.analyze(privates);
 		System.out.println(privateInteractions);
+		
+		logger.info("Initializing Gephi Project");
+		ProjectController controller = Lookup.getDefault().lookup(ProjectController.class);
+		controller.newProject();
+		
+		GraphConverter.convert(conversationCycleInteractions, true);
+
+		ExportController exporter = Lookup.getDefault().lookup(ExportController.class);
+		try {
+			exporter.exportFile(new File("out.gexf"));
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		System.out.println(new GraphStatsCollection(conversationCycleInteractions, true));
 	}
 
 	public static void help() {

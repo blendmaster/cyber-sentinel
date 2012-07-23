@@ -43,7 +43,7 @@ public class GraphConverter {
 			Node t2 = vertexNodeMap.get(t);
 
 			Edge e2 = model.factory().newEdge(s2, t2, (float) e.getWeight(),
-					false);
+					directed);
 			gephiGraph.addEdge(e2);
 		}
 
