@@ -35,6 +35,7 @@ public interface Message extends Serializable, Comparable<Message> {
 	public Date getTime();
     public User getUser();
     public String getID();
+    public int getDocID();
 	
 	public AttributeSet getAttributeSet();
 	

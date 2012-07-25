@@ -43,6 +43,9 @@ public class MutableMessage implements Message {
 	protected boolean hasTime = false;
 	protected Date time;
 	
+	protected boolean hasDocID = false;
+	protected int docID;
+	
 	private static Map<String, User> uuidMap;
 
 	@Override
@@ -307,5 +310,20 @@ public class MutableMessage implements Message {
 	@Override
 	public String getID() {
 		return this.getReceiverUUID() + DateFormat.getDateInstance().format(time);
+	}
+	
+	@Override
+	public int getDocID() {
+		if(this.hasDocID) {
+			return this.docID;
+		}
+		else {
+			throw new MessageAttributeNotFoundException("docID");
+		}
+	}
+	
+	public void setDocID(int docID) {
+		this.docID = docID;
+		this.hasDocID = true;
 	}
 }

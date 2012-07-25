@@ -65,4 +65,8 @@ public class LocalMessageIndex implements MessageIndex {
 	public void addFilter(MessageFilter filter) {
 		converter.addFilter(filter);
 	}
+	
+	public IndexReader getReader() {
+		return this.reader;
+	}
 }

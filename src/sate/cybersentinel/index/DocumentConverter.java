@@ -39,6 +39,7 @@ public class DocumentConverter {
 			MutableMessage message = new MutableMessage();
 			
 			Document doc = searcher.doc(scoreDoc.doc);
+			message.setDocID(scoreDoc.doc);
 			
 			boolean fRegion = false;
 			boolean fX = false;

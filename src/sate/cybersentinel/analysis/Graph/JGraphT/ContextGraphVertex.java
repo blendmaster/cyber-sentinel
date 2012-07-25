@@ -10,6 +10,8 @@ import java.util.Map;
 import org.apache.lucene.index.Term;
 import org.jgrapht.graph.ClassBasedVertexFactory;
 
+import sate.cybersentinel.message.user.User;
+
 /**
  *
  * @author Isaac
@@ -18,32 +20,32 @@ public class ContextGraphVertex extends ClassBasedVertexFactory implements Compa
 
     private Term term;
             //User, countofWordUsage
-    private Map<InteractionGraphVertex, Integer> userVertexSet;
+    private Map<User, Integer> userVertexSet;
     
     public ContextGraphVertex(Term term) {
         super(ContextGraphVertex.class);
         this.term = term;
-        userVertexSet = new LinkedHashMap<InteractionGraphVertex, Integer>();
+        userVertexSet = new LinkedHashMap<User, Integer>();
     }
 
-    public ContextGraphVertex(Term term, Map<InteractionGraphVertex, Integer> userVertexSet) {
+    public ContextGraphVertex(Term term, Map<User, Integer> userVertexSet) {
         super(ContextGraphVertex.class);
         this.term = term;
         this.userVertexSet = userVertexSet;
     }
 
-    public ContextGraphVertex(Term term, InteractionGraphVertex userVertex) {
+    public ContextGraphVertex(Term term, User userVertex) {
         super(ContextGraphVertex.class);
         this.term = term;
-        userVertexSet = new LinkedHashMap<InteractionGraphVertex, Integer>();
+        userVertexSet = new LinkedHashMap<User, Integer>();
         putUser(userVertex);
     }
 
-    public void addUser(InteractionGraphVertex userVertex) {
+    public void addUser(User userVertex) {
         putUser(userVertex);
     }
 
-    private void putUser(InteractionGraphVertex userVertex) {
+    private void putUser(User userVertex) {
         Integer get = userVertexSet.get(userVertex);
         if(get==null) {
             userVertexSet.put(userVertex, 1);
@@ -68,7 +70,7 @@ public class ContextGraphVertex extends ClassBasedVertexFactory implements Compa
         return term;
     }
 
-    public Map<InteractionGraphVertex, Integer> getUserVertexMap() {
+    public Map<User, Integer> getUserVertexMap() {
         return userVertexSet;
     }
 
