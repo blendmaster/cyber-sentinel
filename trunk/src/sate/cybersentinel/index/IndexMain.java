@@ -18,12 +18,14 @@ import org.gephi.project.api.ProjectController;
 import org.openide.util.Lookup;
 
 import sate.cybersentinel.analysis.ChatResponse;
+import sate.cybersentinel.analysis.ContextGraphBuilder;
 import sate.cybersentinel.analysis.ConversationProbabilityFunction;
 import sate.cybersentinel.analysis.DirectMessageGraph;
 import sate.cybersentinel.analysis.LogLogisticDistribution;
 import sate.cybersentinel.analysis.MessageGraph;
 import sate.cybersentinel.analysis.Graph.GraphConverter;
 import sate.cybersentinel.analysis.Graph.GraphStatsCollection;
+import sate.cybersentinel.analysis.Graph.JGraphT.ContextGraph;
 import sate.cybersentinel.analysis.Graph.JGraphT.InteractionGraph;
 import sate.cybersentinel.analysis.technique.AnalysisTechnique;
 import sate.cybersentinel.analysis.technique.ConversationCycleAnalysisTechnique;
@@ -90,12 +92,12 @@ public class IndexMain {
 		UserManager.process(globals);
 		logger.info("Processing private messages");
 		UserManager.process(privates);
-
+        /*
 		System.out.print("\n\n\n===== ANALYZING DIRECT MESSAGES =====\n\n\n");
 		AnalysisTechnique directAnalysisTechnique = new DirectMessagingAnalysisTechnique();
 		InteractionGraph directMessageInteractions = directAnalysisTechnique
 				.analyze(globals);
-		System.out.println(directMessageInteractions);
+         */
 
 		System.out
 				.print("\n\n\n===== ANALYZING CONVERSATION CYCLE =====\n\n\n");
@@ -110,6 +112,11 @@ public class IndexMain {
 				.analyze(privates);
 		System.out.println(privateInteractions);
 		
+		System.out.print("\n\n\n===== BUILDING CONTEXT GRAPH =====\n\n\n");
+		ContextGraphBuilder builder = new ContextGraphBuilder(index.getReader());
+		ContextGraph context = builder.build(messages);
+		System.out.println("Context built... too large to print");
+		
 		logger.info("Initializing Gephi Project");
 		ProjectController controller = Lookup.getDefault().lookup(ProjectController.class);
 		controller.newProject();
@@ -118,13 +125,24 @@ public class IndexMain {
 
 		ExportController exporter = Lookup.getDefault().lookup(ExportController.class);
 		try {
-			exporter.exportFile(new File("out.gexf"));
+			exporter.exportFile(new File("conversationcycle.gexf"));
 		}
 		catch (IOException e) {
 			e.printStackTrace();
 		}
 		
-		System.out.println(new GraphStatsCollection(conversationCycleInteractions, true));
+		controller.newProject();
+		GraphConverter.convert(context, false);
+
+		try {
+			exporter.exportFile(new File("context.gexf"));
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		
+		//System.out.println(new GraphStatsCollection(conversationCycleInteractions, true));
 	}
 
 	public static void help() {
