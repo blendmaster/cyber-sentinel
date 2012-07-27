@@ -65,7 +65,7 @@ public class GraphStatsCollection  implements GraphStats{
     ClusteringCoefficient clusteringCoefficient;
     double averageClusteringCoefficient = -1;
 
-    public GraphStatsCollection(InteractionGraph g, boolean directed) {
+    public GraphStatsCollection(Graph g, boolean directed) {
         
         pc.deleteWorkspace(pc.getCurrentWorkspace());
         pc.newProject();
@@ -232,7 +232,8 @@ public class GraphStatsCollection  implements GraphStats{
     
     private void getModularityPartitionVertex() {
         modularityCommunity = new ArrayList<Set<User>>();
-        Iterator<InteractionGraphVertex> vertex_iterator = g.vertexSet().iterator();
+        Iterator<InteractionGraphVertex> vertex_iterator;
+        InteractionGraphVertex v = null;
         
         for(Part<Node> p:partition.getParts()) {
             Node[] nodes = p.getObjects();
@@ -243,11 +244,12 @@ public class GraphStatsCollection  implements GraphStats{
                 if(n.getNodeData() == null)
                     continue;
                 User user = null;
+                vertex_iterator = g.vertexSet().iterator();
                 while( vertex_iterator.hasNext() )
                 {
-                    InteractionGraphVertex next = vertex_iterator.next();
-                    if( next.getUser().getUUID().equals(n.getId()) )
-                        user = next.getUser();
+                    v = vertex_iterator.next();
+                    if( v.getUser().getUUID().equals(n.getNodeData().getId()) )
+                        user = v.getUser();
                 }
                 if(user != null)
                     community.add(user);
@@ -438,9 +440,22 @@ public class GraphStatsCollection  implements GraphStats{
 
     
     @Override
-    public VertexStats getVertexStats(GraphStatsCollection stats, User v)
+    public VertexStats getVertexStats(GraphStatsCollection stats, User u)
     {
-        VertexStats vStat = new VertexStatImpl(v, stats);
+        InteractionGraphVertex v = null;
+        Set<InteractionGraphVertex> vertexSet = g.vertexSet();
+        for(InteractionGraphVertex vv: vertexSet)
+        {
+            if(vv.getUser()==u)
+            {
+                v = vv;
+            }
+        }
+        
+        if(v==null)
+            return null;
+        
+        VertexStats vStat = new VertexStatImpl(u, stats);
         return vStat;
     }
 

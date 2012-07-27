@@ -5,6 +5,7 @@
 
 package sate.cybersentinel.analysis.Graph.JGraphT;
 
+import java.util.Objects;
 import org.jgrapht.graph.ClassBasedVertexFactory;
 import sate.cybersentinel.message.user.User;
 
@@ -34,5 +35,31 @@ public class InteractionGraphVertex extends
 	public String toString() {
 		return user.toString();
 	}
+        
+        @Override
+        public int hashCode()
+        {
+            return user.hashCode();
+        }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        
+        if (getClass() == obj.getClass()) 
+        {
+            final InteractionGraphVertex other = (InteractionGraphVertex) obj;
+            return Objects.equals(this.user, other.user);
+        }
+        else if(obj.getClass() == User.class)
+        {
+            final User other = (User) obj;
+            return Objects.equals(this.user, other);
+        }
+        
+        return false;
+    }
 
 }

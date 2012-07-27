@@ -21,6 +21,7 @@ import sate.cybersentinel.analysis.ChatResponse;
 import sate.cybersentinel.analysis.ContextGraphBuilder;
 import sate.cybersentinel.analysis.ConversationProbabilityFunction;
 import sate.cybersentinel.analysis.DirectMessageGraph;
+import sate.cybersentinel.analysis.Graph.CalculateGraphStatistics;
 import sate.cybersentinel.analysis.LogLogisticDistribution;
 import sate.cybersentinel.analysis.MessageGraph;
 import sate.cybersentinel.analysis.Graph.GraphConverter;
@@ -42,7 +43,8 @@ public class IndexMain {
 	private static Logger logger = Logger.getLogger(IndexMain.class.getName());
 
 	public static void main(String[] args) {
-		if (args.length < 3) {
+
+		if(args.length < 3) {
 			help();
 			System.exit(0);
 		}
@@ -97,13 +99,28 @@ public class IndexMain {
 		InteractionGraph directMessageInteractions = directAnalysisTechnique
 				.analyze(globals);
          */
+                
+		
+		logger.info("Initializing Gephi Project");
+		ProjectController controller = Lookup.getDefault().lookup(ProjectController.class);
+		controller.newProject();
+		controller.newProject();
 
 		System.out
 				.print("\n\n\n===== ANALYZING CONVERSATION CYCLE =====\n\n\n");
 		AnalysisTechnique conversationCycleAnalysisTechnique = new ConversationCycleAnalysisTechnique();
 		InteractionGraph conversationCycleInteractions = conversationCycleAnalysisTechnique
 				.analyze(globals);
-		System.out.println(conversationCycleInteractions);
+//		System.out.println(conversationCycleInteractions);
+                CalculateGraphStatistics stats = new CalculateGraphStatistics(conversationCycleInteractions, true);
+                stats.allGraphs();
+                GraphStatsCollection modularityGraph = stats.modularityGraph();
+                System.out.println(modularityGraph.toString());
+                
+                
+                GraphStatsCollection graphStatsCollection = new GraphStatsCollection(conversationCycleInteractions, true);
+                graphStatsCollection.computeAll();
+                System.out.println(graphStatsCollection.toString());
 
 		System.out.print("\n\n\n===== ANALYZING PRIVATE MESSAGES =====\n\n\n");
 		AnalysisTechnique privateAnalysisTechnique = new PrivateMessageAnalysisTechnique();
@@ -116,9 +133,6 @@ public class IndexMain {
 		ContextGraph context = builder.build(messages);
 		System.out.println("Context built... too large to print");
 		
-		logger.info("Initializing Gephi Project");
-		ProjectController controller = Lookup.getDefault().lookup(ProjectController.class);
-		controller.newProject();
 		
 		GraphConverter.convert(conversationCycleInteractions, true);
 
@@ -129,8 +143,7 @@ public class IndexMain {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
-		
-		controller.newProject();
+
 		GraphConverter.convert(context, false);
 
 		try {
