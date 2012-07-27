@@ -43,7 +43,7 @@ public class GraphConverter {
 			InteractionGraphVertex t = graph.getEdgeTarget(e);
 			Node s2 = vertexNodeMap.get(s);
 			Node t2 = vertexNodeMap.get(t);
-
+			
 			Edge e2 = model.factory().newEdge(s2, t2, (float) e.getWeight(),
 					directed);
 			gephiGraph.addEdge(e2);
@@ -69,7 +69,7 @@ public class GraphConverter {
 		Map<ContextGraphVertex, Node> vertexNodeMap = new TreeMap<>();
 
 		for (ContextGraphVertex v : graph.vertexSet()) {
-			Node n = model.factory().newNode(null);
+			Node n = model.factory().newNode();
 			n.getNodeData().setLabel(v.getTerm().text());
 			gephiGraph.addNode(n);
 

@@ -31,7 +31,6 @@ import sate.cybersentinel.analysis.technique.AnalysisTechnique;
 import sate.cybersentinel.analysis.technique.ConversationCycleAnalysisTechnique;
 import sate.cybersentinel.analysis.technique.DirectMessagingAnalysisTechnique;
 import sate.cybersentinel.analysis.technique.PrivateMessageAnalysisTechnique;
-import sate.cybersentinel.display.InteractionGraphDisplay;
 import sate.cybersentinel.input.opensim.OpenSimGlobalChatAttributeSet;
 import sate.cybersentinel.input.opensim.OpenSimPrivateChatAttributeSet;
 import sate.cybersentinel.message.Message;
@@ -142,7 +141,7 @@ public class IndexMain {
 		}
 
 		
-		//System.out.println(new GraphStatsCollection(conversationCycleInteractions, true));
+		System.out.println(new GraphStatsCollection(conversationCycleInteractions, true));
 	}
 
 	public static void help() {
