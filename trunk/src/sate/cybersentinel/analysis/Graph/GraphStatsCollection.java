@@ -246,7 +246,7 @@ public class GraphStatsCollection  implements GraphStats{
                 while( vertex_iterator.hasNext() )
                 {
                     InteractionGraphVertex next = vertex_iterator.next();
-                    if( next.getUser().getUUID().equals(n.getNodeData().getId()) )
+                    if( next.getUser().getUUID().equals(n.getId()) )
                         user = next.getUser();
                 }
                 if(user != null)
