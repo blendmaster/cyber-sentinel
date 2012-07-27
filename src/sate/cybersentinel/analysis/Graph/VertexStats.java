@@ -11,10 +11,13 @@ import java.io.Serializable;
  *
  * @author Isaac
  */
-public interface VertexStats extends Serializable{
+public interface VertexStats extends Serializable, Comparable<VertexStats>{
 
     public static enum VertexGroup{MAIN_GRAPH, WEAK_CONNECTED, STRONG_CONNECTED, COMMUNITY_MODULARITY};
 //    public void setClusterCoefficient(double val);
+    
+    public String getId();
+    
     public double getClusterCoefficient();
 
 //    public void setBetweenessCentrality(double val);

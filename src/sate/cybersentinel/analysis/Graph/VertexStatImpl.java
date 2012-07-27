@@ -6,6 +6,7 @@
 package sate.cybersentinel.analysis.Graph;
 
 
+import java.util.Iterator;
 import java.util.Set;
 import org.gephi.data.attributes.AttributeRowImpl;
 import org.gephi.data.attributes.api.AttributeColumn;
@@ -21,11 +22,9 @@ import org.jgrapht.DirectedGraph;
 import org.jgrapht.Graph;
 import org.jgrapht.WeightedGraph;
 import org.jgrapht.alg.BlockCutpointGraph;
-import org.jgrapht.graph.AsUndirectedGraph;
-import org.jgrapht.graph.DefaultDirectedWeightedGraph;
-import org.jgrapht.graph.DirectedWeightedMultigraph;
-import org.jgrapht.graph.SimpleWeightedGraph;
+import org.jgrapht.graph.*;
 import sate.cybersentinel.analysis.Graph.JGraphT.InteractionGraphEdge;
+import sate.cybersentinel.analysis.Graph.JGraphT.InteractionGraphVertex;
 import sate.cybersentinel.message.user.User;
 
 /**
@@ -35,7 +34,8 @@ import sate.cybersentinel.message.user.User;
 public class VertexStatImpl implements VertexStats{
 
     Graph g;
-    User v;
+    User user;
+    InteractionGraphVertex v;
     GraphStatsCollection statsCollection;
 //    CentralityComputer nodeCentralityStats;
     BlockCutpointGraph blockCutpointGraph;
@@ -52,8 +52,9 @@ public class VertexStatImpl implements VertexStats{
     int outDegreeWeight;
     int degreeWeight;
 
-    public VertexStatImpl(User v, GraphStatsCollection statsCollection) {
-        this.v = v;
+    public VertexStatImpl(User user, GraphStatsCollection statsCollection) {
+        this.user = user;
+        v = v = new InteractionGraphVertex(user);
         this.statsCollection = statsCollection;
         g = statsCollection.getGraph_JGrapht();
         blockCutpointGraph = statsCollection.blockCutpointGraph;
@@ -65,7 +66,7 @@ public class VertexStatImpl implements VertexStats{
     private void getValues()
     {
         AttributeTable nodeTable = statsCollection.attributeModel.getNodeTable();
-        Node node = statsCollection.graphModel.getGraph().getNode( v.getUUID() );
+        Node node = statsCollection.graphModel.getGraph().getNode( user.getUUID() );
         AttributeRowImpl row = (AttributeRowImpl) node.getNodeData().getAttributes();
         AttributeColumn col = nodeTable.getColumn(ClusteringCoefficient.CLUSTERING_COEFF);
         if(col != null)
@@ -83,36 +84,35 @@ public class VertexStatImpl implements VertexStats{
         if(col != null)
             eigenvectorCentrality = (Double)row.getValue(EigenvectorCentrality.EIGENVECTOR);
 //        clusterCoefficient = nodeCentralityStats.findClusteringOf(v);
-//        betweenessCentrality = nodeCentralityStats.findBetweennessOf(v);
+//        betweenessCentrality = nodeCentralityStats.findBetweennessOf(v);        
+        
         if(blockCutpointGraph != null)
             isCutPoint = blockCutpointGraph.isCutpoint(v);
-//        if( g.getClass().isInstance(DirectedGraph.class) )
+        
             try
         {
             DirectedGraph d = (DirectedGraph)g;
-            inDegree = d.inDegreeOf(v);
-            outDegree = d.outDegreeOf(v);
+            inDegree = d.inDegreeOf(user);
+            outDegree = d.outDegreeOf(user);
             degree = inDegree + outDegree;
 
-//            if(g.getClass().isInstance(WeightedGraph.class))
-                try
+            try
             {
-//                DefaultDirectedWeightedGraph dwg = (DefaultDirectedWeightedGraph) g;
                 DirectedWeightedMultigraph dwg = (DirectedWeightedMultigraph) g;
                 Set<InteractionGraphEdge> incomingEdgesOf = dwg.incomingEdgesOf(v);
                 int incomingWeight = 0;
                 for(InteractionGraphEdge e:incomingEdgesOf) {
                     incomingWeight += e.getWeight();
-                }
-                inDegreeWeight = incomingWeight;
+            }
+            inDegreeWeight = incomingWeight;
 
-                Set<InteractionGraphEdge> outcomingEdgesOf = dwg.outgoingEdgesOf(v);
-                int outgoingWeight = 0;
-                for(InteractionGraphEdge e:outcomingEdgesOf) {
-                    outgoingWeight += e.getWeight();
-                }
-                outDegreeWeight = outgoingWeight;
-                degreeWeight = inDegreeWeight + outDegreeWeight;
+            Set<InteractionGraphEdge> outcomingEdgesOf = dwg.outgoingEdgesOf(v);
+            int outgoingWeight = 0;
+            for(InteractionGraphEdge e:outcomingEdgesOf) {
+                outgoingWeight += e.getWeight();
+            }
+            outDegreeWeight = outgoingWeight;
+            degreeWeight = inDegreeWeight + outDegreeWeight;
                 
             }
                 catch(Exception ex) {}
@@ -120,7 +120,7 @@ public class VertexStatImpl implements VertexStats{
         catch(Exception ex)
         {
             AsUndirectedGraph u = new AsUndirectedGraph( (DirectedGraph) g);
-            degree = u.degreeOf(v);
+            degree = u.degreeOf( v );
             if(g.getClass().isInstance(WeightedGraph.class)) {
                 SimpleWeightedGraph swg = (SimpleWeightedGraph) g;
                 Set<InteractionGraphEdge>  edges = swg.edgesOf(v);
@@ -195,5 +195,23 @@ public class VertexStatImpl implements VertexStats{
                    "\t" + inDegree + "\t" + inDegreeWeight + "\t" + outDegree + "\t" + outDegreeWeight +
                    "\t" + degree + "\t" + degreeWeight + "\t" + closnessCentrality + "\t" + eccentricity;
         return s;
+    }
+
+    @Override
+    public int compareTo(VertexStats o) {
+        if(o ==null)
+            return -1;
+        return this.getId().compareTo(o.getId());
+    }
+    
+    @Override
+    public String getId()
+    {
+        return user.getUUID();
+    }
+    
+    public User getUser()
+    {
+        return user;
     }
 }
