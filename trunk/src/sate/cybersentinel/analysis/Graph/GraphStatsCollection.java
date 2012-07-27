@@ -42,7 +42,7 @@ import sate.cybersentinel.analysis.Graph.JGraphT.InteractionGraphVertex;
  */
 public class GraphStatsCollection  implements GraphStats{
 
-    InteractionGraph g;
+    Graph g;
     boolean directed;
     ConnectivityInspector weakConnectInsp;
     StrongConnectivityInspector strongConnectInsp;
@@ -300,7 +300,7 @@ public class GraphStatsCollection  implements GraphStats{
     }
 
 
-    public InteractionGraph getGraph_JGrapht() {
+    public Graph getGraph_JGrapht() {
         return g;
     }
 
