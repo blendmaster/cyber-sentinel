@@ -8,15 +8,14 @@ package sate.cybersentinel.analysis.Graph.JGraphT;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import org.jgrapht.EdgeFactory;
-import org.jgrapht.graph.SimpleWeightedGraph;
-
+import org.jgrapht.graph.DirectedWeightedMultigraph;
 import sate.cybersentinel.message.user.User;
 
 /**
  *
  * @author Isaac Osesina
  */
-public class InteractionGraph extends SimpleWeightedGraph<InteractionGraphVertex, InteractionGraphEdge>{
+public class InteractionGraph extends DirectedWeightedMultigraph<InteractionGraphVertex, InteractionGraphEdge>{
 
     private Map<User, InteractionGraphVertex> vertexMap;
     
