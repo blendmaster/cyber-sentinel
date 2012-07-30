@@ -116,15 +116,7 @@ public class IndexMain {
 		InteractionGraph conversationCycleInteractions = conversationCycleAnalysisTechnique
 				.analyze(globals);
 //		System.out.println(conversationCycleInteractions);
-                CalculateGraphStatistics stats = new CalculateGraphStatistics(conversationCycleInteractions, true);
-                stats.allGraphs();
-                GraphStatsCollection modularityGraph = stats.modularityGraph();
-                System.out.println(modularityGraph.toString());
                 
-                
-                GraphStatsCollection graphStatsCollection = new GraphStatsCollection(conversationCycleInteractions, true);
-                graphStatsCollection.computeAll();
-                System.out.println(graphStatsCollection.toString());
 
 		System.out.print("\n\n\n===== ANALYZING PRIVATE MESSAGES =====\n\n\n");
 		AnalysisTechnique privateAnalysisTechnique = new PrivateMessageAnalysisTechnique();
@@ -157,13 +149,18 @@ public class IndexMain {
 			e.printStackTrace();
 		}
 		
-		logger.info("Computing lots of stats");
-		GraphStatsCollection stats = new GraphStatsCollection(conversationCycleInteractions, true);
-		stats.computeAll();
-		logger.info("Done computing lots of stats");
-		System.out.println("Modularity: " + stats.getModularity());
-		System.out.println("Modularity Communities: " + stats.getModularityCommunity());
-		TeamAnalysis teamAnalysis = new TeamAnalysis(stats);
+		CalculateGraphStatistics stats = new CalculateGraphStatistics(conversationCycleInteractions, true);
+        stats.allGraphs();
+        GraphStatsCollection modularityGraph = stats.modularityGraph();
+        System.out.println(modularityGraph.toString());
+        
+        GraphStatsCollection graphStatsCollection = new GraphStatsCollection(conversationCycleInteractions, true);
+        graphStatsCollection.computeAll();
+        System.out.println(graphStatsCollection.toString());
+		
+		System.out.println("Modularity: " + modularityGraph.getModularity());
+		System.out.println("Modularity Communities: " + modularityGraph.getModularityCommunity());
+		TeamAnalysis teamAnalysis = new TeamAnalysis(modularityGraph);
 		System.out.println(teamAnalysis.getAssociationMap());
 	}
 
