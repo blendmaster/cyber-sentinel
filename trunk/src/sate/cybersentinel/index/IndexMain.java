@@ -24,10 +24,14 @@ import sate.cybersentinel.analysis.DirectMessageGraph;
 import sate.cybersentinel.analysis.Graph.CalculateGraphStatistics;
 import sate.cybersentinel.analysis.LogLogisticDistribution;
 import sate.cybersentinel.analysis.MessageGraph;
+import sate.cybersentinel.analysis.TeamAnalysis;
 import sate.cybersentinel.analysis.Graph.GraphConverter;
+import sate.cybersentinel.analysis.Graph.GraphStats;
 import sate.cybersentinel.analysis.Graph.GraphStatsCollection;
 import sate.cybersentinel.analysis.Graph.JGraphT.ContextGraph;
 import sate.cybersentinel.analysis.Graph.JGraphT.InteractionGraph;
+import sate.cybersentinel.analysis.Graph.JGraphT.InteractionGraphEdge;
+import sate.cybersentinel.analysis.Graph.JGraphT.InteractionGraphVertex;
 import sate.cybersentinel.analysis.technique.AnalysisTechnique;
 import sate.cybersentinel.analysis.technique.ConversationCycleAnalysisTechnique;
 import sate.cybersentinel.analysis.technique.DirectMessagingAnalysisTechnique;
@@ -152,9 +156,15 @@ public class IndexMain {
 		catch (IOException e) {
 			e.printStackTrace();
 		}
-
 		
-		System.out.println(new GraphStatsCollection(conversationCycleInteractions, true));
+		logger.info("Computing lots of stats");
+		GraphStatsCollection stats = new GraphStatsCollection(conversationCycleInteractions, true);
+		stats.computeAll();
+		logger.info("Done computing lots of stats");
+		System.out.println("Modularity: " + stats.getModularity());
+		System.out.println("Modularity Communities: " + stats.getModularityCommunity());
+		TeamAnalysis teamAnalysis = new TeamAnalysis(stats);
+		System.out.println(teamAnalysis.getAssociationMap());
 	}
 
 	public static void help() {
